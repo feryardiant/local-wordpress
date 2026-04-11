@@ -2,7 +2,8 @@ services:
   wp:
     image: wordpress:6.9-php8.4-apache
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - ${FORWARD_WEB_PORT:-8080}:80
     environment:
@@ -12,6 +13,11 @@ services:
       WORDPRESS_DB_NAME: ${DB_NAME}
     volumes:
       - ./volumes/wordpress:/var/www/html
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   db:
     image: mysql:8.0
@@ -22,6 +28,11 @@ services:
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
     volumes:
       - ./volumes/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 networks:
   default:
