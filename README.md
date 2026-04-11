@@ -21,6 +21,7 @@ DB_NAME=wordpress
 # Site Configuration
 SITE_URL=http://localhost:8080
 SITE_TITLE="WordPress Local"
+SITE_TIMEZONE="Asia/Jakarta"
 SITE_ADMIN_USER=admin
 SITE_ADMIN_PASS=password
 SITE_ADMIN_EMAIL=admin@example.com

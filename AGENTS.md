@@ -13,6 +13,7 @@ A Dockerized WordPress local development environment using Apache, MySQL 8.0, an
 3.  **WP-CLI Management**: Use the dedicated `cli` service for all WordPress commands.
     *   Command pattern: `docker compose run --rm cli wp <command>`
 4.  **Volumes & Persistence**: Database data is in `volumes/mysql`, and site files are in `volumes/wordpress`. Modification of site files MUST be done with awareness of file permissions (the environment uses user `33` / `www-data`).
+5.  **Metadata Management**: ALL AI-generated metadata (plans, specs, and design documents) MUST be stored exclusively in the `.gemini/` directory (e.g., `.gemini/plans/`, `.gemini/specs/`). Do not use any other directory for persistent or temporary agent artifacts.
 
 ## 📁 Development Guidelines
 
@@ -23,5 +24,5 @@ A Dockerized WordPress local development environment using Apache, MySQL 8.0, an
 ## 📝 Persistent Memory (Context)
 
 - **Date**: 2026-04-11
-- **Status**: The local environment is set up with automated installation and a comprehensive `README.md`.
+- **Status**: Environment is fully documented with automated WordPress installation, custom theme support, and persistent agent guidelines. Metadata is managed via the `.gemini/` directory.
 - **Next Steps**: (Add future project goals here as needed).

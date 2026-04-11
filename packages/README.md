@@ -12,6 +12,10 @@ To ensure the local development environment remains organized and functional, al
 2.  **WordPress Conventions**: Follow standard WordPress metadata requirements for themes (`style.css` header) and plugins (primary PHP file header).
 3.  **Manual Mounts**: Any new package must be manually added as a volume mount in `compose.yaml` to be visible within the WordPress container.
 
+## 🤖 Automation Features
+
+- **Favicon Synchronization**: During initialization, the `cli` service automatically copies the `favicon.ico` from your default theme (e.g., `packages/custom-theme/favicon.ico`) to the WordPress site root. This ensures your custom branding is applied consistently across the local environment.
+
 ## 📁 Current Packages
 
 ### Themes
