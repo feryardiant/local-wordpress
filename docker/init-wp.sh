@@ -15,6 +15,10 @@ else
     --skip-email --allow-root
 fi
 
+echo "Initializing default Options..."
+wp option update permalink_structure "/%postname%/"
+wp option update timezone_string "${SITE_TIMEZONE}"
+
 echo "Initializing default Plugins..."
 for plugin in ${SITE_PLUGINS//,/ }; do
     if wp plugin is-installed "$plugin" --url="${SITE_URL}"; then
