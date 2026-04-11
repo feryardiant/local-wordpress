@@ -1,4 +1,39 @@
-.env
+# Generic
+# --------------------------
+Thumbs.db
+Desktop.ini
+.directory
+*.cache
+*.old
+*.log
+*.tmp
+*.zip
+._
+*~
 
-conductor
+# IDE Project Configurations
+# --------------------------
+nbproject
+.idea
+.settings
+.vscode
+.project
+*.sublime-*
+
+# AI Agent
+# --------------------------
 .gemini
+conductor
+
+# Development
+# --------------------------
+.env.*
+.env
+vendor
+node_modules
+
+# But Keep these
+# --------------------------
+!.env.example
+!.env.*.example
+!.gitkeep
