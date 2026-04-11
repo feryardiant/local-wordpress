@@ -45,3 +45,19 @@ SITE_DEFAULT_THEME=twentytwentyfive
 - **Local Site**: [http://localhost:8080](http://localhost:8080) (Adjust port if `FORWARD_WEB_PORT` is changed)
 - **Admin Dashboard**: [http://localhost:8080/wp-admin](http://localhost:8080/wp-admin)
 - **Default Credentials**: Defined in your `.env` file (e.g., `admin` / `password`).
+
+## 🛠 Management & WP-CLI
+
+This project includes a dedicated `cli` service to run commands without manually installing WP-CLI on your host machine.
+
+- **Run WP-CLI command**: `docker compose run --rm cli wp <command>`
+- **Example (list users)**: `docker compose run --rm cli wp user list`
+- **Example (update plugins)**: `docker compose run --rm cli wp plugin update --all`
+
+## 📁 Project Structure
+
+- `compose.yaml`: Docker services orchestration.
+- `docker/init-wp.sh`: Script used by the `cli` service to install and configure WordPress.
+- `volumes/wordpress`: Persisted WordPress site files.
+- `volumes/mysql`: Persisted database data.
+- `packages/`: (Empty) Place for custom plugins or themes.
