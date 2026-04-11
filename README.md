@@ -30,3 +30,18 @@ SITE_PLUGINS=akismet,hello-dolly
 SITE_THEMES=twentytwentyfive
 SITE_DEFAULT_THEME=twentytwentyfive
 ```
+
+## 🚀 Usage
+
+### Lifecycle Commands
+
+- **Start Services**: `docker compose up -d`
+- **Stop Services**: `docker compose down`
+- **View Logs**: `docker compose logs -f`
+- **Check Status**: `docker compose ps`
+
+### Access Information
+
+- **Local Site**: [http://localhost:8080](http://localhost:8080) (Adjust port if `FORWARD_WEB_PORT` is changed)
+- **Admin Dashboard**: [http://localhost:8080/wp-admin](http://localhost:8080/wp-admin)
+- **Default Credentials**: Defined in your `.env` file (e.g., `admin` / `password`).
