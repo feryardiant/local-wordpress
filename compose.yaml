@@ -1,0 +1,28 @@
+services:
+  wp:
+    image: wordpress:6.9-php8.4-apache
+    depends_on:
+      - db
+    ports:
+      - ${FORWARD_WEB_PORT:-8080}:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASS}
+      WORDPRESS_DB_NAME: ${DB_NAME}
+    volumes:
+      - ./volumes/wordpress:/var/www/html
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+
+networks:
+  default:
+     name: wordpress
