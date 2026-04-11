@@ -18,6 +18,7 @@ services:
       WORDPRESS_DB_NAME: ${DB_NAME}
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
+      - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
       <<: *healthcheck
@@ -46,6 +47,7 @@ services:
       WORDPRESS_DB_NAME: ${DB_NAME}
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
+      - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme:ro
       - ./docker/init-wp.sh:/usr/local/bin/init-wp:ro
 
   db:

@@ -60,4 +60,4 @@ This project includes a dedicated `cli` service to run commands without manually
 - `docker/init-wp.sh`: Script used by the `cli` service to install and configure WordPress.
 - `volumes/wordpress`: Persisted WordPress site files.
 - `volumes/mysql`: Persisted database data.
-- `packages/`: (Empty) Place for custom plugins or themes.
+- `packages/`: Local themes and plugins (currently includes `custom-theme`).

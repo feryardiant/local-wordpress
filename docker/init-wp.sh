@@ -32,7 +32,7 @@ for theme in ${SITE_THEMES//,/ }; do
         continue
     fi
 
-    wp theme install "$plugin" --url="${SITE_URL}"
+    wp theme install "$theme" --url="${SITE_URL}"
 done
 
 wp theme activate ${SITE_DEFAULT_THEME} --url="${SITE_URL}"
