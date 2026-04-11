@@ -1,12 +1,16 @@
-# Local WordPress Development
+# 📦 WordPress Evaluation Environment
 
-A Docker-based local WordPress environment using Apache, MySQL 8.0, and WP-CLI for automated initialization.
+A zero-config, Docker-based local environment designed for rapid evaluation of WordPress themes and plugins. Spin up a fully installed site with your choice of themes and plugins in seconds, bypassing the WordPress setup wizard entirely.
 
-## 🛠 Environment Setup
+## 🚀 Quick Evaluation Workflow
 
-This project relies on environment variables defined in a `.env` file. Copy the template below to get started:
+1.  **Configure**: Create a `.env` file in the root directory (use the template below).
+2.  **Start**: Run `docker compose up -d`.
+3.  **Evaluate**: Access your site at [http://localhost:8080](http://localhost:8080) (or your configured port).
 
-### `.env` Template
+## 🛠 Environment Setup (optional)
+
+Everything is controlled via environment variables. Copy this template to your `.env` file and adjust as needed:
 
 ```bash
 # Docker / PHP Versions
@@ -18,47 +22,35 @@ DB_USER=wordpress
 DB_PASS=secret
 DB_NAME=wordpress
 
-# Site Configuration
+# Site Configuration (Automatic Installation)
 SITE_URL=http://localhost:8080
-SITE_TITLE="WordPress Local"
+SITE_TITLE="WP Evaluation Site"
 SITE_TIMEZONE="Asia/Jakarta"
 SITE_ADMIN_USER=admin
 SITE_ADMIN_PASS=password
 SITE_ADMIN_EMAIL=admin@example.com
 
-# Initialization (comma-separated lists)
+# Auto-Initialization (comma-separated lists)
 SITE_PLUGINS=akismet,hello-dolly
 SITE_THEMES=twentytwentyfive
 SITE_DEFAULT_THEME=twentytwentyfive
 ```
 
-## 🚀 Usage
+## 🔌 Evaluating Themes & Plugins
 
-### Lifecycle Commands
+- **Official Market (Repo)**: Add the slugs to `SITE_PLUGINS` or `SITE_THEMES` in your `.env` and restart the containers.
+- **Custom / Local**: Place your theme or plugin folder in the `packages/` directory.
+
+## 🛠 Lifecycle Commands
 
 - **Start Services**: `docker compose up -d`
 - **Stop Services**: `docker compose down`
-- **View Logs**: `docker compose logs -f`
-- **Check Status**: `docker compose ps`
-
-### Access Information
-
-- **Local Site**: [http://localhost:8080](http://localhost:8080) (Adjust port if `FORWARD_WEB_PORT` is changed)
-- **Admin Dashboard**: [http://localhost:8080/wp-admin](http://localhost:8080/wp-admin)
-- **Default Credentials**: Defined in your `.env` file (e.g., `admin` / `password`).
-
-## 🛠 Management & WP-CLI
-
-This project includes a dedicated `cli` service to run commands without manually installing WP-CLI on your host machine.
-
-- **Run WP-CLI command**: `docker compose run --rm cli wp <command>`
-- **Example (list users)**: `docker compose run --rm cli wp user list`
-- **Example (update plugins)**: `docker compose run --rm cli wp plugin update --all`
+- **Reset Environment**: `docker compose down -v` (Removes all data for a fresh start)
+- **View Setup Logs**: `docker compose logs -f cli` (Monitor the auto-installation process)
 
 ## 📁 Project Structure
 
-- `compose.yaml`: Docker services orchestration.
-- `docker/init-wp.sh`: Script used by the `cli` service to install and configure WordPress.
-- `volumes/wordpress`: Persisted WordPress site files.
-- `volumes/mysql`: Persisted database data.
+- `docker/init-wp.sh`: The "Zero-Config" engine—automatically handles installation, options, and branding.
 - `packages/`: Local themes and plugins (currently includes `custom-theme`).
+- `volumes/`: Persisted data for WordPress files and MySQL.
+- `compose.yaml`: Docker services orchestration.
