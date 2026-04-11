@@ -21,24 +21,24 @@ wp option update timezone_string "${SITE_TIMEZONE}"
 
 echo "Initializing default Plugins..."
 for plugin in ${SITE_PLUGINS//,/ }; do
-    if wp plugin is-installed "$plugin" --url="${SITE_URL}"; then
+    if wp plugin is-installed "$plugin"; then
         echo " - $plugin is already installed."
         continue
     fi
 
-    wp plugin install "$plugin" --url="${SITE_URL}" --activate
+    wp plugin install "$plugin" --activate
 done
 
 echo "Initializing default Themes..."
 for theme in ${SITE_THEMES//,/ }; do
-    if wp theme is-installed "$theme" --url="${SITE_URL}"; then
+    if wp theme is-installed "$theme"; then
         echo " - $theme is already installed."
         continue
     fi
 
-    wp theme install "$theme" --url="${SITE_URL}"
+    wp theme install "$theme"
 done
 
-wp theme activate ${SITE_DEFAULT_THEME} --url="${SITE_URL}"
+wp theme activate ${SITE_DEFAULT_THEME}
 
 echo "Site URL: ${SITE_URL}"
