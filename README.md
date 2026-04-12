@@ -4,7 +4,7 @@ A zero-config, Docker-based local environment designed for rapid evaluation of W
 
 ## 🚀 Quick Evaluation Workflow
 
-1.  **Configure**: Create a `.env` file in the root directory (use the template below).
+1.  **Configure**: Copy `.env.example` to `.env` in the root directory (or use the template below).
 2.  **Start**: Run `docker compose up -d`.
 3.  **Evaluate**: Access your site at [http://localhost:8080](http://localhost:8080) (or your configured port).
 
@@ -34,7 +34,17 @@ SITE_ADMIN_EMAIL=admin@example.com
 SITE_PLUGINS=akismet,hello-dolly
 SITE_THEMES=twentytwentyfive
 SITE_DEFAULT_THEME=twentytwentyfive
+
+# Network / Multisite
+MULTISITE_ENABLED=0 # Set to 1 for automated multisite conversion
 ```
+
+## 🌐 Multisite Support
+
+This environment supports automated conversion to a **WordPress Multisite Network** (subfolder type).
+
+- **Enable**: Set `MULTISITE_ENABLED=1` in your `.env` file.
+- **How it works**: The `cli` service will automatically convert the site and apply the necessary `.htaccess.multisite` configuration from the `public/` directory.
 
 ## 🔌 Evaluating Themes & Plugins
 
@@ -52,5 +62,6 @@ SITE_DEFAULT_THEME=twentytwentyfive
 
 - `docker/init-wp.sh`: The "Zero-Config" engine—automatically handles installation, options, and branding.
 - `packages/`: Local themes and plugins (currently includes `custom-theme`).
+- `public/`: Static assets (favicon) and server configurations (.htaccess).
 - `volumes/`: Persisted data for WordPress files and MySQL.
 - `compose.yaml`: Docker services orchestration.
