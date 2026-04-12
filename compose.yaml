@@ -29,7 +29,6 @@ services:
   cli:
     image: wordpress:cli-php${PHP_VERSION:-8.4}
     command: ["/bin/bash", "/usr/local/bin/init-wp"]
-    user: '33'
     depends_on:
       db:
         condition: service_healthy
@@ -46,8 +45,10 @@ services:
       SITE_PLUGINS: ${SITE_PLUGINS:-}
       SITE_THEMES: ${SITE_THEMES:-}
       SITE_DEFAULT_THEME: ${SITE_DEFAULT_THEME:-}
+      MULTISITE_ENABLED: ${MULTISITE_ENABLED:-0}
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
+      - ./public:/var/www/public
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme:ro
       - ./docker/init-wp.sh:/usr/local/bin/init-wp:ro
 

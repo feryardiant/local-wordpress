@@ -14,7 +14,7 @@ To ensure the local development environment remains organized and functional, al
 
 ## 🤖 Automation Features
 
-- **Favicon Synchronization**: During initialization, the `cli` service automatically copies the `favicon.ico` from your default theme (e.g., `packages/custom-theme/favicon.ico`) to the WordPress site root. This ensures your custom branding is applied consistently across the local environment.
+- **Favicon Synchronization**: During initialization, the `cli` service automatically copies the `favicon.ico` from the `public/` directory to the WordPress site root. This ensures your custom branding is applied consistently across the local environment.
 
 ## 📁 Current Packages
 
