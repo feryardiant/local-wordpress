@@ -19,4 +19,4 @@ To ensure the local development environment remains organized and functional, al
 ## 📁 Current Packages
 
 ### Themes
-- **custom-theme**: A starter theme for local development.
+- **custom-theme**: A starter theme for local development. Includes automated PHP Mailer configuration to route WordPress emails to the project's Mailpit service.

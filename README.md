@@ -16,6 +16,7 @@ Everything is controlled via environment variables. Copy this template to your `
 # Docker / PHP Versions
 PHP_VERSION=8.4
 FORWARD_WEB_PORT=8080
+FORWARD_MAILPIT_PORT=8025
 
 # Database Credentials
 DB_USER=wordpress
@@ -46,6 +47,13 @@ This environment supports automated conversion to a **WordPress Multisite Networ
 - **Enable**: Set `MULTISITE_ENABLED=1` in your `.env` file.
 - **How it works**: The `cli` service will automatically convert the site and apply the necessary `.htaccess.multisite` configuration from the `public/` directory.
 
+## 📧 Email Testing (Mailpit)
+
+All outgoing emails are automatically captured for testing using **Mailpit**.
+
+- **Dashboard**: [http://localhost:8025](http://localhost:8025) (or your configured `FORWARD_MAILPIT_PORT`).
+- **How it works**: The `custom-theme` contains an automated PHP Mailer configuration (`phpmailer_init` hook) that routes all emails to the internal `mail` service container on port 1025.
+
 ## 🔌 Evaluating Themes & Plugins
 
 - **Official Market (Repo)**: Add the slugs to `SITE_PLUGINS` or `SITE_THEMES` in your `.env` and restart the containers.
@@ -63,5 +71,5 @@ This environment supports automated conversion to a **WordPress Multisite Networ
 - `docker/init-wp.sh`: The "Zero-Config" engine—automatically handles installation, options, and branding.
 - `packages/`: Local themes and plugins (currently includes `custom-theme`).
 - `public/`: Static assets (favicon) and server configurations (.htaccess).
-- `volumes/`: Persisted data for WordPress files and MySQL.
+- `volumes/`: Persisted data for WordPress files, MySQL, and Mailpit.
 - `compose.yaml`: Docker services orchestration.
