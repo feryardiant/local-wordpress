@@ -24,24 +24,34 @@ if [[ ! -f ./favicon.ico ]]; then
 fi
 
 echo "Initializing default Plugins..."
+
+plugins=""
+
 for plugin in ${SITE_PLUGINS//,/ }; do
     if wp plugin is-installed "$plugin"; then
         echo " - $plugin is already installed."
         continue
     fi
 
-    wp plugin install "$plugin" --activate
+    plugins="$plugins $plugin"
 done
 
+wp plugin install $plugins --activate
+
 echo "Initializing default Themes..."
+
+themes=""
+
 for theme in ${SITE_THEMES//,/ }; do
     if wp theme is-installed "$theme"; then
         echo " - $theme is already installed."
         continue
     fi
 
-    wp theme install "$theme"
+    themes="$themes $theme"
 done
+
+wp theme install "$theme"
 
 wp theme activate ${SITE_DEFAULT_THEME}
 
@@ -53,6 +63,8 @@ if [[ ${MULTISITE_ENABLED} -eq 1 ]]; then
     echo 'Update .htaccess.'
 
     wp core multisite-convert
+
+    wp plugin activate $plugins --network
 fi
 
 echo "Cleanup..."
