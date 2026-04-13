@@ -8,6 +8,7 @@ x-wp-envs: &wp-envs
   WORDPRESS_DB_USER: ${DB_USER:-wordpress}
   WORDPRESS_DB_PASSWORD: ${DB_PASS:-secret}
   WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+  # WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-0}
 
 services:
   wp:
@@ -50,6 +51,7 @@ services:
       MULTISITE_ENABLED: ${MULTISITE_ENABLED:-0}
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
+      - ./docker/volumes/wp-cli:/home/www-data/.wp-cli
       - ./public:/var/www/public
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme:ro
       - ./docker/init-wp.sh:/usr/local/bin/init-wp:ro
