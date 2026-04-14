@@ -193,7 +193,7 @@ function ct_wpcf7_register_submitter( string $email, string $name, ?string $phon
 		return 0;
 	}
 
-	add_user_meta( $user_id, 'phone', $phone ?? '' );
+	add_user_meta( $user_id, 'user_phone', $phone ?? '' );
 
 	return (int) $user_id;
 }

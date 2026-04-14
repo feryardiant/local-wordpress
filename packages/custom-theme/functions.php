@@ -1,8 +1,10 @@
 <?php
 
-add_action( 'wp_enqueue_scripts', 'custom_theme_scripts' );
+add_action( 'init', static function() {
+	add_filter( 'user_contactmethods', 'custom_theme_user_contact_methods', 10, 1 );
+} );
 
-add_filter( 'user_contactmethods', 'custom_theme_user_contact_methods', 10, 2 );
+add_action( 'wp_enqueue_scripts', 'custom_theme_scripts' );
 
 function custom_theme_scripts() {
 	$theme = wp_get_theme( get_stylesheet() );
@@ -36,9 +38,16 @@ function custom_theme_deactivation() {
 	do_action( 'ct_deactivation' );
 }
 
-function custom_theme_user_contact_methods( $methods, $user ) {
-	// Add user contact methods
-	$methods['user_phone'] = __( 'Phone Number', 'custom-theme' );
+function custom_theme_user_contact_methods( $methods ) {
+	unset(
+		$methods['dribbble'],
+		$methods['pinterest'],
+		$methods['vkontakte'],
+		$methods['vimeo'],
+		$methods['odnoklassniki'],
+	);
 
-	return $methods;
+	return array_merge( array(
+		'user_phone' => __( 'Phone Number', 'custom-theme' )
+	), $methods );
 }
