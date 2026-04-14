@@ -2,6 +2,8 @@
 
 add_action( 'wp_enqueue_scripts', 'custom_theme_scripts' );
 
+add_filter( 'user_contactmethods', 'custom_theme_user_contact_methods', 10, 2 );
+
 function custom_theme_scripts() {
 	$theme = wp_get_theme( get_stylesheet() );
 
@@ -32,4 +34,11 @@ function custom_theme_activation() {
 
 function custom_theme_deactivation() {
 	do_action( 'ct_deactivation' );
+}
+
+function custom_theme_user_contact_methods( $methods, $user ) {
+	// Add user contact methods
+	$methods['user_phone'] = __( 'Phone Number', 'custom-theme' );
+
+	return $methods;
 }
