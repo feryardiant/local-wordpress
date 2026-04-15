@@ -7,7 +7,15 @@ add_action( 'init', static function() {
 		'labels' => array(
 			'name' => __( 'Submissions', 'custom-theme' ),
 			'singular_name' => __( 'Submission', 'custom-theme' ),
+			'view_item' => __( 'View Submission', 'custom-theme' ),
+			'search_items' => __( 'Search Submissions', 'custom-theme' ),
+			'not_found' => __( 'No submissions found.', 'custom-theme' ),
+			'not_found_in_trash' => __( 'No submissions found in Trash.', 'custom-theme' ),
+			'filter_items_list' => _x( 'Filter submissions list', 'Screen reader text for the filter links heading on the post type listing screen.', 'custom-theme' ),
+			'items_list_navigation' => _x( 'Submissions list navigation', 'Screen reader text for the pagination heading on the post type listing screen.', 'custom-theme' ),
+			'items_list' => _x( 'Submissions list', 'Screen reader text for the items list heading on the post type listing screen.', 'custom-theme' ),
 		),
+		'description' => 'List of form submissions.',
 		'public' => false,
 		'show_ui' => false,
 		'show_in_nav_menus' => false,
@@ -15,8 +23,8 @@ add_action( 'init', static function() {
 		'capability_type' => 'post',
 		'hierarchical' => false,
 		'supports' => [ 'title', 'excerpt', 'author', 'custom-fields' ],
-		'rewrite' => false,
-		'query_var' => false,
+		'rewrite' => array( 'slug' => 'submission' ),
+		'query_var' => true,
 		'menu_icon' => 'dashicons-email-alt',
 		// 'register_meta_box_cb' => static function( WP_Post $post ) {
 		// 	//
@@ -90,7 +98,7 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 		'post_status' => 'publish',
 		'post_title' => $subject_title ?? sprintf(
 			/* translators: %s: Contact form title */
-			__( 'Submission for "%s"' ),
+			__( 'Submission for "%s"', 'custom-theme' ),
 			$contact_form->title()
 		),
 		'post_parent' => $contact_form->id(),
@@ -109,8 +117,10 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 }
 
 function ct_wpcf7_editor_panels( array $panels ) {
+	$post_type_object = get_post_type_object( 'form-submissions' );
+
 	$panels['submissions'] = array(
-		'title' => __( 'Submissions', 'custom-theme' ),
+		'title' => $post_type_object->label,
 		'callback' => 'ct_wpcf7_submissions_panel',
 	);
 
@@ -119,11 +129,12 @@ function ct_wpcf7_editor_panels( array $panels ) {
 
 function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
 	$formatter = new WPCF7_HTMLFormatter();
+	$post_type_object = get_post_type_object( 'form-submissions' );
 
 	$formatter->append_start_tag( 'h2' );
 
 	$formatter->append_preformatted(
-		esc_html( __( 'Form Submissions', 'custom-theme' ) )
+		esc_html( $post_type_object->label )
 	);
 
 	$formatter->end_tag( 'h2' );
@@ -131,7 +142,11 @@ function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
 	$formatter->append_start_tag( 'fieldset' );
 
 	$formatter->append_start_tag( 'legend' );
-	$formatter->append_preformatted( 'Description goes here' );
+
+	$formatter->append_preformatted(
+		esc_html( $post_type_object->description )
+	);
+
 	$formatter->end_tag( 'legend' );
 
 	// Future content goes here
@@ -140,9 +155,11 @@ function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
 }
 
 function ct_submissions_admin_menu() {
+	$post_type_object = get_post_type_object( 'form-submissions' );
+
 	$submissions = add_submenu_page( 'wpcf7',
-		__( 'List of Submissions', 'custom-theme' ),
-		__( 'Submissions', 'custom-theme' ),
+		$post_type_object->labels->items_list,
+		$post_type_object->labels->menu_name,
 		'wpcf7_read_contact_forms',
 		'ct-wpcf7-submissions',
 		'ct_submissions_admin_management_page',
@@ -172,6 +189,7 @@ function ct_submissions_load_page() {
 
 function ct_submissions_admin_management_page() {
 	$list_table = new Submissions_List_Table();
+	$post_type_object = get_post_type_object( 'form-submissions' );
 
 	$list_table->prepare_items();
 
@@ -190,7 +208,7 @@ function ct_submissions_admin_management_page() {
 	) );
 
 	$formatter->append_preformatted(
-		esc_html( __( 'Form Submissions', 'custom-theme' ) )
+		esc_html( $post_type_object->labels->items_list )
 	);
 
 	$formatter->end_tag( 'h1' );
@@ -199,11 +217,8 @@ function ct_submissions_admin_management_page() {
 		'class' => 'wp-header-end',
 	) );
 
-	$formatter->call_user_func( static function () use ( $list_table ) {
-		$list_table->search_box(
-			__( 'Search Submissions', 'custom-theme' ),
-			'ct-wpcf7-submissions'
-		);
+	$formatter->call_user_func( static function () use ( $list_table, $post_type_object ) {
+		$list_table->search_box( $post_type_object->labels->search_items, 'ct-wpcf7-submissions' );
 
 		$list_table->display();
 	} );
