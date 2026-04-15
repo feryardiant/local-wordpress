@@ -145,13 +145,180 @@ function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
 
 	$formatter->append_start_tag( 'legend' );
 
-	$formatter->append_preformatted(
-		esc_html( $post_type_object->description )
-	);
+	$description = __( 'You can edit the way you treat each submissions here.', 'custom-theme' );
+
+	$formatter->append_preformatted( esc_html( $description ) );
 
 	$formatter->end_tag( 'legend' );
 
-	// Future content goes here
+	$formatter->append_start_tag( 'table', array(
+		'class' => 'form-table',
+	) );
+
+	$formatter->append_start_tag( 'tbody' );
+
+	$panel_id = 'ct-wpcf7-submissions';
+
+	$mail_tags = $contact_form->collect_mail_tags();
+
+	$fields = array(
+		'record' => array(
+			'label' => esc_html( __( 'Record', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Whether to record the submissions to the database', 'custom-theme' )
+			),
+			'atts' => array( 'type' => 'checkbox' ),
+		),
+		'subject' => array(
+			'label' => esc_html( __( 'Subject', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Choose which field is identified as a submission subject', 'custom-theme' )
+			),
+			'type' => 'select',
+			'atts' => array( 'class' => 'large-text code' ),
+			'options' => $mail_tags,
+		),
+		'message' => array(
+			'label' => esc_html( __( 'Message', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Choose which field is identified as a submission message', 'custom-theme' )
+			),
+			'type' => 'select',
+			'atts' => array( 'class' => 'large-text code' ),
+			'options' => $mail_tags,
+		),
+		'sep-1' => array( 'type' => 'separator' ),
+		'author' => array(
+			'label' => esc_html( __( 'Author', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Whether the submission author will be registered as subscriber', 'custom-theme' )
+			),
+			'atts' => array( 'type' => 'checkbox' ),
+		),
+		'author_name' => array(
+			'label' => esc_html( __( 'Author Name', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Choose which field is identified as the submitter\'s name', 'custom-theme' )
+			),
+			'type' => 'select',
+			'atts' => array( 'class' => 'large-text code' ),
+			'options' => $mail_tags,
+		),
+		'author_email' => array(
+			'label' => esc_html( __( 'Author Email', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Choose which field is identified as the submitter\'s email', 'custom-theme' )
+			),
+			'type' => 'select',
+			'atts' => array( 'class' => 'large-text code' ),
+			'options' => $mail_tags,
+		),
+		'author_phone' => array(
+			'label' => esc_html( __( 'Author Phone', 'custom-theme' ) ),
+			'description' => esc_html(
+				__( 'Choose which field is identified as the submitter\'s phone number', 'custom-theme' )
+			),
+			'type' => 'select',
+			'atts' => array( 'class' => 'large-text code' ),
+			'options' => $mail_tags,
+		),
+	);
+
+	foreach ( $fields as $id => $field ) {
+		$field = wp_parse_args( $field, array(
+			'label' => '',
+			'description' => '',
+			'type' => 'input',
+			'atts' => array(),
+			'options' => array(),
+		) );
+
+		$formatter->append_start_tag( 'tr' );
+
+		if ( $field['type'] === 'separator' ) {
+			$formatter->append_start_tag( 'td', array(
+				'colspan' => '2',
+				'style' => 'padding: 0;',
+			) );
+
+			$formatter->append_start_tag( 'hr' );
+			continue;
+		}
+
+		$formatter->append_start_tag( 'th', array(
+			'scope' => 'row',
+		) );
+
+		$field_id = sprintf( '%s-%s', $panel_id, $id );
+		$field_atts = wp_parse_args( $field['atts'], array(
+			'id' => $field_id,
+			'name' => sprintf( '%s[%s]', $panel_id, $id ),
+			'value' => null,
+		) );
+
+		$formatter->append_start_tag( 'label', array(
+			'for' => $field_id,
+		) );
+
+		$formatter->append_preformatted( $field['label'] );
+
+		$formatter->append_start_tag( 'td' );
+
+		$is_select = $field['type'] === 'select';
+		$is_checkbox = $field['type'] === 'input' && $field_atts['type'] === 'checkbox';
+
+		$selected = null;
+
+		if ( $is_select ) {
+			$selected = $field_atts['value'];
+			unset( $field_atts['value'] );
+		}
+
+		if ( $is_checkbox ) {
+			$formatter->append_start_tag( 'label', array(
+				'for' => $field_id,
+			) );
+		}
+
+		$formatter->append_start_tag( $field['type'], $field_atts );
+
+		if ( $field['type'] === 'select' && is_array( $field['options'] ?? null ) ) {
+			$formatter->append_start_tag( 'option', array(
+				'selected' => is_null( $selected ),
+			) );
+
+			$formatter->append_preformatted(
+				esc_html( __( 'None selected', 'custom-theme' ) )
+			);
+
+			foreach ( $field['options'] as $value => $label ) {
+				$value = is_int( $value ) ? $label : $value;
+
+				$formatter->append_start_tag( 'option', array(
+					'value' => esc_attr( $value ),
+					'selected' => $selected === $value,
+				) );
+
+				$formatter->append_preformatted( esc_html( $label ) );
+			}
+
+			$formatter->end_tag( $field['type'] );
+		}
+
+		if ( ! $is_checkbox ) {
+			$formatter->append_start_tag( 'p', array(
+				'class' => 'description',
+			) );
+		}
+
+		if ( ! empty( $field['description'] ) ) {
+			$formatter->append_preformatted( esc_html( $field['description'] ) );
+		}
+	}
+
+	$formatter->end_tag( 'tbody' );
+
+	$formatter->end_tag( 'table' );
 
 	$formatter->print();
 }
