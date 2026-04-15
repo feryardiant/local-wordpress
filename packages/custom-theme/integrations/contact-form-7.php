@@ -41,6 +41,7 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 	$email_field = null;
 	$phone_field = null;
 	$name_field = null;
+	$subject_field = null;
 
 	foreach ( $contact_form->scan_form_tags() as $tag ) {
 		/** @var WPCF7_FormTag $tag */
@@ -62,6 +63,10 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 			if ( in_array( 'autocomplete:name', $tag->options ) ) {
 				$name_field = $tag->name;
 			}
+
+			if ( in_array( 'autocomplete:subject', $tag->options ) ) {
+				$subject_field = $tag->name;
+			}
 		}
 
 		$form_data[$tag->name] = $value;
@@ -79,11 +84,17 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 
 	do_action( 'ct_wpcf7_before_save', $form_data );
 
+	$subject_title = $subject_field ? $form_data[$subject_field] : null;
+
 	// Saving the data
 	$returned_id = wp_insert_post( array(
 		'post_type' => 'form-submissions',
 		'post_status' => 'publish',
-		'post_title' => 'Form Submission',
+		'post_title' => $subject_title ?? sprintf(
+			/* translators: %s: Contact form title */
+			__( 'Submission for "%s"' ),
+			$contact_form->title()
+		),
 		'post_parent' => $contact_form->id(),
 		'post_author' => $submitter_id,
 		// 'post_content' => wp_json_encode( $form_data ),
