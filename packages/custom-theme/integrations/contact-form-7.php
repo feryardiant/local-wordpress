@@ -10,7 +10,6 @@ add_action( 'init', static function() {
 		),
 		'public' => false,
 		'show_ui' => false,
-		'show_in_menu' => false,
 		'show_in_nav_menus' => false,
 		'show_in_admin_bar' => false,
 		'capability_type' => 'post',
@@ -24,8 +23,7 @@ add_action( 'init', static function() {
 		// },
 	) );
 
-	add_filter( "manage_{$post_type}_posts_columns", 'custom_theme_manage_submissions_columns', 10, 1 );
-	add_filter( "manage_{$post_type}_posts_custom_column", 'custom_theme_manage_submissions_custom_column', 10, 2 );
+	add_action( 'admin_menu', 'ct_submissions_admin_menu', 9, 0 );
 } );
 
 add_action( 'wpcf7_before_send_mail', 'ct_wpcf7_before_send_mail' );
@@ -130,72 +128,89 @@ function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
 
 	$formatter->end_tag( 'h2' );
 
-	$formatter->append_start_tag( 'pre' );
+	$formatter->append_start_tag( 'fieldset' );
 
-	$submissions = get_posts( array(
-		'post_type' => 'form-submissions',
-		'post_parent' => $contact_form->id(),
-		// 'posts_per_page' => -1,
-	) );
+	$formatter->append_start_tag( 'legend' );
+	$formatter->append_preformatted( 'Description goes here' );
+	$formatter->end_tag( 'legend' );
 
-	$items = array();
-
-	foreach ( $submissions as $submission ) {
-		$item = array(
-			'ID' => $submission->ID,
-			'post_type' => $submission->post_type,
-			'post_title' => $submission->post_title,
-			'post_excerpt' => $submission->post_excerpt,
-			'post_content' => $submission->post_content,
-			'post_date' => $submission->post_date,
-			'post_date_gmt' => $submission->post_date_gmt,
-			'post_modified' => $submission->post_modified,
-			'post_modified_gmt' => $submission->post_modified_gmt,
-			'post_author' => $submission->post_author,
-			'post_status' => $submission->post_status,
-			'post_name' => $submission->post_name,
-			'guid' => $submission->guid,
-			'meta' => array(),
-		);
-
-		foreach ( get_post_meta( $submission->ID ) as $field => $value ) {
-			$item['meta'][$field] = is_array( $value ) ? reset( $value ) : $value;
-		}
-
-		$items[] = $item;
-	}
-
-	$formatter->append_preformatted( print_r( $items, true ) );
-
-	$formatter->end_tag( 'pre' );
+	// Future content goes here
 
 	$formatter->print();
 }
 
-function custom_theme_manage_submissions_columns( array $columns ) {
-	return array(
-		'cb' => $columns['cb'],
-		'title' => $columns['title'],
-		'form' => __( 'Form', 'custom-theme' ),
-		'author' => $columns['author'],
-		'date' => $columns['date'],
+function ct_submissions_admin_menu() {
+	$submissions = add_submenu_page( 'wpcf7',
+		__( 'List of Submissions', 'custom-theme' ),
+		__( 'Submissions', 'custom-theme' ),
+		'wpcf7_read_contact_forms',
+		'ct-wpcf7-submissions',
+		'ct_submissions_admin_management_page',
+		1,
+	);
+
+	add_action(
+		'load-' . $submissions,
+		'ct_submissions_load_page',
+		10, 0
 	);
 }
 
-function custom_theme_manage_submissions_custom_column( string $column, int $post_id ) {
-	if ( $column === 'form' ) {
-		$post = get_post( $post_id );
+function ct_submissions_load_page() {
+	$screen = get_current_screen();
 
-		if ( ! $post->post_parent ) {
-			echo '<span aria-hidden="true">—</span><span class="screen-reader-text">(no form)</span>';
-
-			return;
-		}
-
-		$form = get_post( $post->post_parent );
-
-		echo $form->post_title;
+	if ( ! class_exists( Submissions_List_Table::class ) ) {
+		require_once __DIR__ . '/class-submissions-list-table.php';
 	}
+
+	add_filter(
+		'manage_' . $screen->id . '_columns',
+		array( Submissions_List_Table::class, 'define_column' ),
+		10, 1
+	);
+}
+
+function ct_submissions_admin_management_page() {
+	$list_table = new Submissions_List_Table();
+
+	$list_table->prepare_items();
+
+	$formatter = new WPCF7_HTMLFormatter( array(
+		'allowed_html' => array_merge( wpcf7_kses_allowed_html(), array(
+			'form' => array( 'method' => true ),
+		) ),
+	) );
+
+	$formatter->append_start_tag( 'div', array(
+		'class' => 'wrap',
+	) );
+
+	$formatter->append_start_tag( 'h1', array(
+		'class' => 'wp-heading-inline',
+	) );
+
+	$formatter->append_preformatted(
+		esc_html( __( 'Form Submissions', 'custom-theme' ) )
+	);
+
+	$formatter->end_tag( 'h1' );
+
+	$formatter->append_start_tag( 'hr', array(
+		'class' => 'wp-header-end',
+	) );
+
+	$formatter->call_user_func( static function () use ( $list_table ) {
+		$list_table->search_box(
+			__( 'Search Submissions', 'custom-theme' ),
+			'ct-wpcf7-submissions'
+		);
+
+		$list_table->display();
+	} );
+
+	$formatter->end_tag( 'div' );
+
+	$formatter->print();
 }
 
 function ct_wpcf7_register_submitter( string $email, string $name, ?string $phone = null ) {
