@@ -6,18 +6,20 @@ use CT_WPCF7\Submission_Option;
 add_action( 'init', static function() {
 	$post_type = 'form-submissions';
 
+	$labels = array(
+		'name' => __( 'Submissions', 'custom-theme' ),
+		'singular_name' => __( 'Submission', 'custom-theme' ),
+		'view_item' => __( 'View Submission', 'custom-theme' ),
+		'search_items' => __( 'Search Submissions', 'custom-theme' ),
+		'not_found' => __( 'No submissions found.', 'custom-theme' ),
+		'not_found_in_trash' => __( 'No submissions found in Trash.', 'custom-theme' ),
+		'filter_items_list' => _x( 'Filter submissions list', 'Screen reader text for the filter links heading on the post type listing screen.', 'custom-theme' ),
+		'items_list_navigation' => _x( 'Submissions list navigation', 'Screen reader text for the pagination heading on the post type listing screen.', 'custom-theme' ),
+		'items_list' => _x( 'Submissions list', 'Screen reader text for the items list heading on the post type listing screen.', 'custom-theme' ),
+	);
+
 	register_post_type( $post_type, array(
-		'labels' => array(
-			'name' => __( 'Submissions', 'custom-theme' ),
-			'singular_name' => __( 'Submission', 'custom-theme' ),
-			'view_item' => __( 'View Submission', 'custom-theme' ),
-			'search_items' => __( 'Search Submissions', 'custom-theme' ),
-			'not_found' => __( 'No submissions found.', 'custom-theme' ),
-			'not_found_in_trash' => __( 'No submissions found in Trash.', 'custom-theme' ),
-			'filter_items_list' => _x( 'Filter submissions list', 'Screen reader text for the filter links heading on the post type listing screen.', 'custom-theme' ),
-			'items_list_navigation' => _x( 'Submissions list navigation', 'Screen reader text for the pagination heading on the post type listing screen.', 'custom-theme' ),
-			'items_list' => _x( 'Submissions list', 'Screen reader text for the items list heading on the post type listing screen.', 'custom-theme' ),
-		),
+		'labels' => $labels,
 		'description' => 'List of form submissions.',
 		'public' => false,
 		'show_ui' => false,
@@ -29,88 +31,147 @@ add_action( 'init', static function() {
 		'rewrite' => array( 'slug' => 'submission' ),
 		'query_var' => true,
 		'menu_icon' => 'dashicons-email-alt',
-		// 'register_meta_box_cb' => static function( WP_Post $post ) {
-		// 	//
-		// },
+		'register_meta_box_cb' => static function( WP_Post $post ) {
+			// Doing nothing for now.
+		},
 	) );
 
 	require_once __DIR__ . '/class-submission-option.php';
 	require_once __DIR__ . '/class-submissions-list-table.php';
 	require_once __DIR__ . '/class-submission-item.php';
-
-	add_action( 'admin_menu', 'ct_submissions_admin_menu', 9, 0 );
 } );
 
-add_action( 'wpcf7_before_send_mail', 'ct_wpcf7_before_send_mail' );
+/**
+ * Register the submissions admin menu.
+ */
+add_action(
+	'admin_menu',
+	static function (): void {
+		$post_type_object = get_post_type_object( 'form-submissions' );
 
-add_action( 'wpcf7_save_contact_form', 'ct_wpcf7_save_contact_form', 10, 2 );
+		$submissions = add_submenu_page( 'wpcf7',
+			$post_type_object->labels->items_list,
+			$post_type_object->labels->menu_name,
+			'wpcf7_read_contact_forms',
+			'ct-wpcf7-submissions',
+			'ct_submissions_admin_management_page',
+			2,
+		);
 
-add_filter( 'wpcf7_pre_construct_contact_form_properties', 'ct_wpcf7_pre_construct_contact_form_properties', 10, 1 );
-
-add_filter( 'wpcf7_editor_panels', 'ct_wpcf7_editor_panels' );
+		add_action(
+			'load-' . $submissions,
+			'ct_submissions_load_page',
+			10, 0
+		);
+	},
+	9, 0
+);
 
 /**
  * Capture the contact form submission and store it to database before sending it.
- *
- * @param WPCF7_ContactForm $contact_form
  */
-function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
-	$option = Submission_Option::get( $contact_form );
+add_action(
+	'wpcf7_before_send_mail',
+	static function ( WPCF7_ContactForm $contact_form ) {
+		$option = Submission_Option::get( $contact_form );
 
-	$form_data = $option->form_data();
+		$form_data = $option->form_data();
 
-	do_action( 'ct_wpcf7_before_save', $form_data );
+		do_action( 'ct_wpcf7_before_save', $form_data );
 
-	$returned_id = Submission_Item::store( $contact_form, $option );
+		$returned_id = Submission_Item::store( $contact_form, $option );
 
-	do_action( 'ct_wpcf7_after_save', $form_data, $returned_id );
-}
-
-/**
- * Register new contact form option properties.
- *
- * @param array<string, array<string, mixed>> $properties
- * @return array<string, array<string, mixed>>
- */
-function ct_wpcf7_pre_construct_contact_form_properties( array $properties ): array {
-	$properties['submissions'] = array();
-
-	return $properties;
-}
+		do_action( 'ct_wpcf7_after_save', $form_data, $returned_id );
+	},
+	10, 1
+);
 
 /**
  * Prepare to store option properties values.
- *
- * @param WPCF7_ContactForm $contact_form
- * @param array<string, array<string, mixed>> $data
  */
-function ct_wpcf7_save_contact_form( WPCF7_ContactForm $contact_form, array $data ): void {
-	$submissions = wp_parse_args( $data['ct-wpcf7-submissions'], array() );
+add_action(
+	'wpcf7_save_contact_form',
+	static function ( WPCF7_ContactForm $contact_form, array $data ): void {
+		$submissions = wp_parse_args( $data['ct-wpcf7-submissions'], array() );
 
-	$contact_form->set_properties( array( 'submissions' => $submissions ) );
-}
+		$contact_form->set_properties( array( 'submissions' => $submissions ) );
+	},
+	10, 2
+);
+
+/**
+ * Register new contact form option properties.
+ */
+add_filter(
+	'wpcf7_pre_construct_contact_form_properties',
+	static function ( array $properties ): array {
+		$properties['submissions'] = array();
+
+		return $properties;
+	},
+	10, 1
+);
 
 /**
  * Add a submissions panel to the contact form editor.
- *
- * @param array<string, array{ title: string, callback: callable }> $panels
- * @return array<string, array{ title: string, callback: callable }>
  */
-function ct_wpcf7_editor_panels( array $panels ): array {
-	$post_type_object = get_post_type_object( 'form-submissions' );
+add_filter(
+	'wpcf7_editor_panels',
+	static function ( array $panels ): array {
+		$post_type_object = get_post_type_object( 'form-submissions' );
 
-	$panels['submissions'] = array(
-		'title' => $post_type_object->label,
-		'callback' => 'ct_wpcf7_submissions_panel',
+		$panels['submissions'] = array(
+			'title' => $post_type_object->label,
+			'callback' => 'ct_wpcf7_submissions_panel',
+		);
+
+		return $panels;
+	},
+	10, 1
+);
+
+/**
+ * Load the submissions admin page.
+ *
+ * @internal
+ */
+function ct_submissions_load_page(): void {
+	$action = wpcf7_superglobal_request( 'action', null );
+
+	do_action( 'ct_submissions_admin_page_load',
+		wpcf7_superglobal_get( 'page' ),
+		$action
 	);
 
-	return $panels;
+	if ( 'read' === $action ) {
+		$id = (int) wpcf7_superglobal_get( 'post' );
+
+		check_admin_referer( 'ct-wpcf7-submission_' . $id );
+
+		$query = array();
+
+		if ( Submission_Item::set_read_status( $id, true ) ) {
+			$query['post'] = $id;
+			$query['message'] = 'marked-read';
+		}
+
+		wp_safe_redirect( ct_wpcf7_admin_url( $query ) );
+		exit();
+	}
+
+	$screen = get_current_screen();
+
+	add_filter(
+		'manage_' . $screen->id . '_columns',
+		array( CT_WPCF7\Submissions_List_Table::class, 'define_column' ),
+		10, 1
+	);
 }
 
 /**
  * Render the submissions panel for the contact form editor.
  *
- * @param WPCF7_ContactForm $contact_form
+ * @internal
  */
 function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ): void {
 	$formatter = new WPCF7_HTMLFormatter();
@@ -247,65 +308,9 @@ function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ): void {
 }
 
 /**
- * Register the submissions admin menu.
- */
-function ct_submissions_admin_menu(): void {
-	$post_type_object = get_post_type_object( 'form-submissions' );
-
-	$submissions = add_submenu_page( 'wpcf7',
-		$post_type_object->labels->items_list,
-		$post_type_object->labels->menu_name,
-		'wpcf7_read_contact_forms',
-		'ct-wpcf7-submissions',
-		'ct_submissions_admin_management_page',
-		2,
-	);
-
-	add_action(
-		'load-' . $submissions,
-		'ct_submissions_load_page',
-		10, 0
-	);
-}
-
-/**
- * Load the submissions admin page.
- */
-function ct_submissions_load_page(): void {
-	$action = wpcf7_superglobal_request( 'action', null );
-
-	do_action( 'ct_submissions_admin_page_load',
-		wpcf7_superglobal_get( 'page' ),
-		$action
-	);
-
-	if ( 'read' === $action ) {
-		$id = (int) wpcf7_superglobal_get( 'post' );
-
-		check_admin_referer( 'ct-wpcf7-submission_' . $id );
-
-		$query = array();
-
-		if ( Submission_Item::set_read_status( $id, true ) ) {
-			$query['post'] = $id;
-			$query['message'] = 'marked-read';
-		}
-
-		wp_safe_redirect( ct_wpcf7_admin_url( $query ) );
-		exit();
-	}
-
-	$screen = get_current_screen();
-
-	add_filter(
-		'manage_' . $screen->id . '_columns',
-		array( CT_WPCF7\Submissions_List_Table::class, 'define_column' ),
-		10, 1
-	);
-}
-
-/**
- * Load the submissions admin management page.
+ * Render the submissions admin management page.
+ *
+ * @internal
  */
 function ct_submissions_admin_management_page(): void {
 	$list_table = new CT_WPCF7\Submissions_List_Table();
@@ -350,8 +355,6 @@ function ct_submissions_admin_management_page(): void {
 
 /**
  * Generate the admin URL for the submissions page.
- *
- * @param array $query
  */
 function ct_wpcf7_admin_url( array $query ): string {
 	return add_query_arg(
