@@ -86,16 +86,13 @@ final class Option implements ArrayAccess {
 
 	/**
 	 * Get all available options for the given $contact_form.
-	 *
-	 * @param WPCF7_ContactForm $contact_form
-	 * @return null|Option
 	 */
-	public static function get( WPCF7_ContactForm $contact_form ) {
+	public static function get( WPCF7_ContactForm $contact_form ): Option|false {
 		$option = new self( $contact_form );
 		$submission = WPCF7_Submission::get_instance();
 
 		if ( ! $submission || ! $option->should_record ) {
-			return;
+			return false;
 		}
 
 		foreach ( $contact_form->scan_form_tags() as $tag ) {

@@ -111,6 +111,7 @@ class List_Table extends WP_List_Table {
 	 *
 	 * @param Item $item
 	 * @param string $column_name
+	 * @return string
 	 */
 	protected function column_default( $item, $column_name ) {
 		return '';
@@ -122,6 +123,7 @@ class List_Table extends WP_List_Table {
 	 * @param Item $item
 	 * @param string $column_name
 	 * @param string $primary
+	 * @return string
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
 		if ( $column_name !== $primary ) {
@@ -161,6 +163,7 @@ class List_Table extends WP_List_Table {
 	 * {@inheritdoc}
 	 *
 	 * @param Item $item
+	 * @return string
 	 */
 	public function column_cb( $item ) {
 		return sprintf(
@@ -175,7 +178,7 @@ class List_Table extends WP_List_Table {
 	 *
 	 * @param Item $item
 	 */
-	public function column_title( Item $item ) {
+	public function column_title( Item $item ): string {
 		$output = sprintf(
 			'<a class="%4$s" href="%1$s" aria-label="%2$s">%3$s</a>',
 			$item->url(),
@@ -193,10 +196,8 @@ class List_Table extends WP_List_Table {
 
 	/**
 	 * Configure the author column.
-	 *
-	 * @param Item $item
 	 */
-	public function column_author( Item $item ) {
+	public function column_author( Item $item ): string {
 		if ( $author = $item->author() ) {
 			return \esc_html( $author->display_name );
 		}
@@ -206,10 +207,8 @@ class List_Table extends WP_List_Table {
 
 	/**
 	 * Configure the form column.
-	 *
-	 * @param Item $item
 	 */
-	public function column_form( Item $item ) {
+	public function column_form( Item $item ): string {
 		if ( $form = $item->form() ) {
 			return \esc_html( $form->post_title );
 		}
@@ -219,10 +218,8 @@ class List_Table extends WP_List_Table {
 
 	/**
 	 * Configure the date column.
-	 *
-	 * @param Item $item
 	 */
-	public function column_date( Item $item ) {
+	public function column_date( Item $item ): string {
 		if ( ! $item->datetime ) {
 			return '';
 		}

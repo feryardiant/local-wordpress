@@ -41,7 +41,7 @@ use WPCF7_HTMLFormatter;
  */
 \add_action(
 	'wpcf7_before_send_mail',
-	static function ( WPCF7_ContactForm $contact_form ) {
+	static function ( WPCF7_ContactForm $contact_form ): void {
 		$option = Option::get( $contact_form );
 
 		if ( ! $option ) {

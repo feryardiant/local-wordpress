@@ -17,17 +17,17 @@ final class Item {
 	/**
 	 * Submission Item ID.
 	 */
-	public readonly int $id;
+	public readonly ?int $id;
 
 	/**
 	 * Submission Form ID.
 	 */
-	public readonly int $parent_id;
+	public readonly ?int $parent_id;
 
 	/**
 	 * Submission Author ID.
 	 */
-	public readonly int $author_id;
+	public readonly ?int $author_id;
 
 	/**
 	 * Submission read status.
@@ -38,12 +38,12 @@ final class Item {
 	/**
 	 * Submission title.
 	 */
-	public readonly string $title;
+	public readonly ?string $title;
 
 	/**
 	 * Submission message.
 	 */
-	public readonly string $message;
+	public readonly ?string $message;
 
 	/**
 	 * Submission datetime.
@@ -55,9 +55,8 @@ final class Item {
 	 *
 	 * @param int $id
 	 * @param bool $read
-	 * @return int|WP_Error
 	 */
-	public static function set_read_status( int $id, bool $read ): int {
+	public static function set_read_status( ?int $id, bool $read ): int|false {
 		return \update_post_meta( $id, '_wpcf7s_read_status', $read ? 1 : 0 );
 	}
 
@@ -80,7 +79,7 @@ final class Item {
 			),
 			'post_parent' => $form->id(),
 			'post_author' => self::store_author( $option ),
-			'post_excerpt' => $option->message ?? null,
+			'post_excerpt' => $option->message,
 			// 'post_content' => null,
 		) );
 
@@ -152,12 +151,12 @@ final class Item {
 			$item = \get_post( $item );
 		}
 
-		$this->id = $item->ID;
-		$this->title = $item->post_title;
-		$this->parent_id = $item->post_parent;
-		$this->author_id = $item->post_author;
-		$this->message = $item->post_excerpt;
-		$this->datetime = \get_post_datetime( $item->ID ) ?: null;
+		$this->id = $item?->ID;
+		$this->title = $item?->post_title;
+		$this->parent_id = $item?->post_parent;
+		$this->author_id = $item?->post_author;
+		$this->message = $item?->post_excerpt;
+		$this->datetime = \get_post_datetime( $item?->ID ?? null ) ?: null;
 		$this->read_status = (int) \get_post_meta( $this->id, '_wpcf7s_read_status', true );
 	}
 
