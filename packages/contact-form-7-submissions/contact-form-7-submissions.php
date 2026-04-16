@@ -9,7 +9,7 @@
  * Author URI: https://feryardiant.id
  * License: GPLv3 or later
  * Requires at least: 6.8
- * Requires PHP: 7.4
+ * Requires PHP: 8.1
  * Requires Plugins: contact-form-7
  *
  * @package feryardiant/contact-form-7-submissions
@@ -19,7 +19,7 @@
 
 define( 'WPCF7S_VERSION', '0.0.0' );
 define( 'WPCF7S__MINIMUM_WP_VERSION', '6.8' );
-define( 'WPCF7S__MINIMUM_PHP_VERSION', '7.4' );
+define( 'WPCF7S__MINIMUM_PHP_VERSION', '8.1' );
 
 /**
  * Check if the version of WordPress in use on the site is supported by Jetpack.
