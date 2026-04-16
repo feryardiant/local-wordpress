@@ -1,6 +1,6 @@
 <?php
 
-namespace CT_WPCF7;
+namespace WPCF7S;
 
 use WP_List_Table;
 use WP_Query;
@@ -10,7 +10,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Submissions_List_Table extends WP_List_Table {
+class List_Table extends WP_List_Table {
 	/**
 	 * Define the columns for the submissions list table.
 	 *
@@ -18,12 +18,12 @@ class Submissions_List_Table extends WP_List_Table {
 	 * @return array
 	 */
 	public static function define_column( array $columns ) {
-		return wp_parse_args( $columns, array(
+		return \wp_parse_args( $columns, array(
 			'cb' => '<input type="checkbox" />',
-			'title' => __( 'Subject', 'custom-theme' ),
-			'form' => __( 'Form', 'custom-theme' ),
-			'author' => __( 'Author', 'custom-theme' ),
-			'date' => __( 'Date', 'custom-theme' ),
+			'title' => __( 'Subject', 'wpcf7-submissions' ),
+			'form' => __( 'Form', 'wpcf7-submissions' ),
+			'author' => __( 'Author', 'wpcf7-submissions' ),
+			'date' => __( 'Date', 'wpcf7-submissions' ),
 		) );
 	}
 
@@ -41,7 +41,7 @@ class Submissions_List_Table extends WP_List_Table {
 	 * Prepare the items for the submissions list table.
 	 */
 	public function prepare_items() {
-		$per_page = $this->get_items_per_page( 'ct_wpcf7_submissions_per_page' );
+		$per_page = $this->get_items_per_page( 'wpcf7s_submissions_per_page' );
 
 		$args = array(
 			'post_type' => 'form-submissions',
@@ -52,16 +52,16 @@ class Submissions_List_Table extends WP_List_Table {
 			'offset' => ( $this->get_pagenum() - 1 ) * $per_page,
 		);
 
-		if ( $search_keyword = wpcf7_superglobal_request( 's' ) ) {
+		if ( $search_keyword = \wpcf7_superglobal_request( 's' ) ) {
 			$args['s'] = $search_keyword;
 		}
 
-		if ( $order_by = wpcf7_superglobal_request( 'orderby' ) ) {
+		if ( $order_by = \wpcf7_superglobal_request( 'orderby' ) ) {
 			$args['orderby'] = $order_by;
 		}
 
 		if (
-			$order = wpcf7_superglobal_request( 'order' ) and
+			$order = \wpcf7_superglobal_request( 'order' ) and
 			'desc' === strtolower( $order )
 		) {
 			$args['order'] = 'DESC';
@@ -70,7 +70,7 @@ class Submissions_List_Table extends WP_List_Table {
 		$q = new WP_Query();
 
 		foreach ( $q->query( $args ) as &$item ) {
-			$this->items[] = new Submission_Item( $item );
+			$this->items[] = new Item( $item );
 		}
 
 		$total_items = $q->found_posts;
@@ -99,13 +99,13 @@ class Submissions_List_Table extends WP_List_Table {
 	 * {@inheritdoc}
 	 */
 	public function get_columns() {
-		return get_column_headers( get_current_screen() );
+		return \get_column_headers( \get_current_screen() );
 	}
 
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 * @param string $column_name
 	 */
 	protected function column_default( $item, $column_name ) {
@@ -115,7 +115,7 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 * @param string $column_name
 	 * @param string $primary
 	 */
@@ -128,25 +128,25 @@ class Submissions_List_Table extends WP_List_Table {
 			'view' => sprintf(
 				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
 				$item->url(),
-				esc_attr( sprintf(
+				\esc_attr( sprintf(
 					/* translators: %s: title of contact form */
-					__( 'View "%s"', 'custom-theme' ),
+					__( 'View "%s"', 'wpcf7-submissions' ),
 					$item->title
 				) ),
-				__( 'View', 'custom-theme' ),
+				__( 'View', 'wpcf7-submissions' ),
 			),
 		);
 
 		if ( $item->is_unread() ) {
 			$actions['read'] = sprintf(
 				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
-				$item->url( 'read', 'ct-wpcf7-submission_' ),
-				esc_attr( sprintf(
+				$item->url( 'read', 'wpcf7s-entry_' ),
+				\esc_attr( sprintf(
 					/* translators: %s: title of contact form */
-					__( 'Mark "%s" as read', 'custom-theme' ),
+					__( 'Mark "%s" as read', 'wpcf7-submissions' ),
 					$item->title,
 				) ),
-				__( 'Mark as read', 'custom-theme' ),
+				__( 'Mark as read', 'wpcf7-submissions' ),
 			);
 		}
 
@@ -156,7 +156,7 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 */
 	public function column_cb( $item ) {
 		return sprintf(
@@ -169,18 +169,18 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * Configure the title column.
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 */
-	public function column_title( Submission_Item $item ) {
+	public function column_title( Item $item ) {
 		$output = sprintf(
 			'<a class="%4$s" href="%1$s" aria-label="%2$s">%3$s</a>',
 			$item->url(),
-			esc_attr( sprintf(
+			\esc_attr( sprintf(
 				/* translators: %s: title of submission */
-				__( 'View &#8220;%s&#8221;', 'custom-theme' ),
+				__( 'View &#8220;%s&#8221;', 'wpcf7-submissions' ),
 				$item->title
 			) ),
-			esc_html( $item->title ),
+			\esc_html( $item->title ),
 			$item->is_unread() ? 'row-title' : ''
 		);
 
@@ -190,11 +190,11 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * Configure the author column.
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 */
-	public function column_author( Submission_Item $item ) {
+	public function column_author( Item $item ) {
 		if ( $author = $item->author() ) {
-			return esc_html( $author->display_name );
+			return \esc_html( $author->display_name );
 		}
 
 		return '<span aria-hidden="true">—</span><span class="screen-reader-text">(no author)</span>';
@@ -203,11 +203,11 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * Configure the form column.
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 */
-	public function column_form( Submission_Item $item ) {
+	public function column_form( Item $item ) {
 		if ( $form = $item->form() ) {
-			return esc_html( $form->post_title );
+			return \esc_html( $form->post_title );
 		}
 
 		return '<span aria-hidden="true">—</span><span class="screen-reader-text">(no form)</span>';
@@ -216,20 +216,20 @@ class Submissions_List_Table extends WP_List_Table {
 	/**
 	 * Configure the date column.
 	 *
-	 * @param Submission_Item $item
+	 * @param Item $item
 	 */
-	public function column_date( Submission_Item $item ) {
+	public function column_date( Item $item ) {
 		if ( ! $item->datetime ) {
 			return '';
 		}
 
 		return sprintf(
 			/* translators: 1: date, 2: time */
-			__( '%1$s at %2$s', 'custom-theme' ),
+			__( '%1$s at %2$s', 'wpcf7-submissions' ),
 			/* translators: date format, see https://www.php.net/date */
-			$item->datetime->format( __( 'Y/m/d', 'custom-theme' ) ),
+			$item->datetime->format( __( 'Y/m/d', 'wpcf7-submissions' ) ),
 			/* translators: time format, see https://www.php.net/date */
-			$item->datetime->format( __( 'g:i a', 'custom-theme' ) )
+			$item->datetime->format( __( 'g:i a', 'wpcf7-submissions' ) )
 		);
 	}
 }

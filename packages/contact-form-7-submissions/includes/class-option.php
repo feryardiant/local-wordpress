@@ -1,12 +1,12 @@
 <?php
 
-namespace CT_WPCF7;
+namespace WPCF7S;
 
 use ArrayAccess;
 use WPCF7_ContactForm;
 use WPCF7_Submission;
 
-final class Submission_Option implements ArrayAccess {
+final class Option implements ArrayAccess {
 	public readonly array $defaults;
 
 	/**
@@ -83,7 +83,7 @@ final class Submission_Option implements ArrayAccess {
 	 * Get all available options for the given $contact_form.
 	 *
 	 * @param WPCF7_ContactForm $contact_form
-	 * @return null|Submission_Option
+	 * @return null|Option
 	 */
 	public static function get( WPCF7_ContactForm $contact_form ) {
 		$option = new self( $contact_form );
@@ -122,7 +122,7 @@ final class Submission_Option implements ArrayAccess {
 			'phone_field' => '',
 		);
 
-		$properties = wp_parse_args( $contact_form->prop( 'submissions' ), $this->defaults );
+		$properties = \wp_parse_args( $contact_form->prop( 'submissions' ), $this->defaults );
 		$boolean_keys = [ 'should_record', 'store_author' ];
 
 		foreach ( $properties as $key => $value ) {
@@ -142,25 +142,25 @@ final class Submission_Option implements ArrayAccess {
 
 		return array(
 			'should_record' => array(
-				'label' => esc_html( __( 'Record', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Whether to record the submissions to the database', 'custom-theme' )
+				'label' => \esc_html( __( 'Record', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Whether to record the submissions to the database', 'wpcf7-submissions' )
 				),
 				'atts' => array( 'type' => 'checkbox' ),
 			),
 			'subject_field' => array(
-				'label' => esc_html( __( 'Subject', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Choose which field is identified as a submission subject', 'custom-theme' )
+				'label' => \esc_html( __( 'Subject', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Choose which field is identified as a submission subject', 'wpcf7-submissions' )
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'message_field' => array(
-				'label' => esc_html( __( 'Message', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Choose which field is identified as a submission message', 'custom-theme' )
+				'label' => \esc_html( __( 'Message', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Choose which field is identified as a submission message', 'wpcf7-submissions' )
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
@@ -168,34 +168,34 @@ final class Submission_Option implements ArrayAccess {
 			),
 			'sep-1' => array( 'type' => 'separator' ),
 			'store_author' => array(
-				'label' => esc_html( __( 'Author', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Whether the submission author will be registered as subscriber', 'custom-theme' )
+				'label' => \esc_html( __( 'Author', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Whether the submission author will be registered as subscriber', 'wpcf7-submissions' )
 				),
 				'atts' => array( 'type' => 'checkbox' ),
 			),
 			'name_field' => array(
-				'label' => esc_html( __( 'Author Name', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Choose which field is identified as the submitter\'s name', 'custom-theme' )
+				'label' => \esc_html( __( 'Author Name', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Choose which field is identified as the submitter\'s name', 'wpcf7-submissions' )
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'email_field' => array(
-				'label' => esc_html( __( 'Author Email', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Choose which field is identified as the submitter\'s email', 'custom-theme' )
+				'label' => \esc_html( __( 'Author Email', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Choose which field is identified as the submitter\'s email', 'wpcf7-submissions' )
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'phone_field' => array(
-				'label' => esc_html( __( 'Author Phone', 'custom-theme' ) ),
-				'description' => esc_html(
-					__( 'Choose which field is identified as the submitter\'s phone number', 'custom-theme' )
+				'label' => \esc_html( __( 'Author Phone', 'wpcf7-submissions' ) ),
+				'description' => \esc_html(
+					__( 'Choose which field is identified as the submitter\'s phone number', 'wpcf7-submissions' )
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),

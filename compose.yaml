@@ -24,6 +24,7 @@ services:
       <<: *wp-envs
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
+      - ./packages/contact-form-7-submissions:/var/www/html/wp-content/plugins/contact-form-7-submissions
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
@@ -63,6 +64,7 @@ services:
       - ./docker/volumes/wordpress:/var/www/html
       - ./docker/volumes/wp-cli:/home/www-data/.wp-cli
       - ./public:/var/www/public
+      - ./packages/contact-form-7-submissions:/var/www/html/wp-content/plugins/contact-form-7-submissions:ro
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme:ro
       - ./docker/init-wp.sh:/usr/local/bin/init-wp:ro
 
