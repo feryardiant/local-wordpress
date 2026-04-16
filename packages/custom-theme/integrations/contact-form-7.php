@@ -415,19 +415,19 @@ function ct_submissions_load_page() {
 		exit();
 	}
 
-	if ( ! class_exists( Submissions_List_Table::class ) ) {
+	if ( ! class_exists( CT_WPCF7_Submissions_List_Table::class ) ) {
 		require_once __DIR__ . '/class-submissions-list-table.php';
 	}
 
 	add_filter(
 		'manage_' . $screen->id . '_columns',
-		array( Submissions_List_Table::class, 'define_column' ),
+		array( CT_WPCF7_Submissions_List_Table::class, 'define_column' ),
 		10, 1
 	);
 }
 
 function ct_submissions_admin_management_page() {
-	$list_table = new Submissions_List_Table();
+	$list_table = new CT_WPCF7_Submissions_List_Table();
 	$post_type_object = get_post_type_object( 'form-submissions' );
 
 	$list_table->prepare_items();

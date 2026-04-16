@@ -4,7 +4,7 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-class Submissions_List_Table extends WP_List_Table {
+class CT_WPCF7_Submissions_List_Table extends WP_List_Table {
 	public static function define_column( array $columns ) {
 		return wp_parse_args( $columns, array(
 			'cb' => '<input type="checkbox" />',
