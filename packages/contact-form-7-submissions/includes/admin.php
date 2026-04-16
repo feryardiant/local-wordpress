@@ -39,6 +39,10 @@ use WPCF7_HTMLFormatter;
 	static function ( WPCF7_ContactForm $contact_form ) {
 		$option = Option::get( $contact_form );
 
+		if ( ! $option ) {
+			return;
+		}
+
 		$form_data = $option->form_data();
 
 		\do_action( 'wpcf7s_before_save', $form_data );
