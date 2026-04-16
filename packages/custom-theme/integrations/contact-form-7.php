@@ -43,7 +43,10 @@ add_filter( 'wpcf7_pre_construct_contact_form_properties', 'ct_wpcf7_pre_constru
 add_filter( 'wpcf7_editor_panels', 'ct_wpcf7_editor_panels' );
 
 function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
-	if ( ! ( $submission = WPCF7_Submission::get_instance() ) ) {
+	$properties = ct_wpcf7_get_properties( $contact_form );
+	$submission = WPCF7_Submission::get_instance();
+
+	if ( ! $submission || ! $properties['record'] ) {
 		return;
 	}
 
@@ -59,7 +62,6 @@ function ct_wpcf7_before_send_mail( WPCF7_ContactForm $contact_form ) {
 	}
 
 	$submitter_id = 0;
-	$properties = ct_wpcf7_get_properties( $contact_form );
 
 	if ( $properties['author'] && $properties['author_email'] && $properties['author_name'] ) {
 		$author_email = $form_data[$properties['author_email']] ?? null;
@@ -143,27 +145,6 @@ function ct_wpcf7_editor_panels( array $panels ) {
 	);
 
 	return $panels;
-}
-
-/**
- * @param WP_Post $item
- * @param 'view'|'read' $action
- * @return string
- */
-function ct_wpcf7_submission_link( WP_Post $item, string $action = 'view', ?string $nonce_key = null ) {
-	$link = add_query_arg(
-		array(
-			'post' => absint( $item->ID ),
-			'action' => $action,
-		),
-		menu_page_url( 'ct-wpcf7-submissions', false )
-	);
-
-	if ( $nonce_key ) {
-		return wp_nonce_url( $link, $nonce_key . absint( $item->ID ) );
-	}
-
-	return esc_url( $link );
 }
 
 function ct_wpcf7_submissions_panel( WPCF7_ContactForm $contact_form ) {
@@ -393,6 +374,9 @@ function ct_submissions_load_page() {
 		$action
 	);
 
+	require_once __DIR__ . '/class-submissions-list-table.php';
+	require_once __DIR__ . '/class-submission-item.php';
+
 	if ( 'read' === $action ) {
 		$id = (int) wpcf7_superglobal_get( 'post' );
 
@@ -415,19 +399,15 @@ function ct_submissions_load_page() {
 		exit();
 	}
 
-	if ( ! class_exists( CT_WPCF7_Submissions_List_Table::class ) ) {
-		require_once __DIR__ . '/class-submissions-list-table.php';
-	}
-
 	add_filter(
 		'manage_' . $screen->id . '_columns',
-		array( CT_WPCF7_Submissions_List_Table::class, 'define_column' ),
+		array( CT_WPCF7\Submissions_List_Table::class, 'define_column' ),
 		10, 1
 	);
 }
 
 function ct_submissions_admin_management_page() {
-	$list_table = new CT_WPCF7_Submissions_List_Table();
+	$list_table = new CT_WPCF7\Submissions_List_Table();
 	$post_type_object = get_post_type_object( 'form-submissions' );
 
 	$list_table->prepare_items();
