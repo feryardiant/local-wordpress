@@ -228,7 +228,7 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 			) );
 
 			$field_atts['value'] = 'on';
-			$field_atts['checked'] = $option[$id] !== null;
+			$field_atts['checked'] = $option[$id];
 		}
 
 		$formatter->append_start_tag( $field['type'], $field_atts );
