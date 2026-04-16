@@ -150,7 +150,7 @@ function ct_wpcf7_editor_panels( array $panels ) {
  * @param 'view'|'read' $action
  * @return string
  */
-function ct_wpcf7_submission_link( WP_Post $item, string $action = 'view' ) {
+function ct_wpcf7_submission_link( WP_Post $item, string $action = 'view', ?string $nonce_key = null ) {
 	$link = add_query_arg(
 		array(
 			'post' => absint( $item->ID ),
@@ -158,6 +158,10 @@ function ct_wpcf7_submission_link( WP_Post $item, string $action = 'view' ) {
 		),
 		menu_page_url( 'ct-wpcf7-submissions', false )
 	);
+
+	if ( $nonce_key ) {
+		return wp_nonce_url( $link, $nonce_key . absint( $item->ID ) );
+	}
 
 	return esc_url( $link );
 }
@@ -388,6 +392,28 @@ function ct_submissions_load_page() {
 		wpcf7_superglobal_get( 'page' ),
 		$action
 	);
+
+	if ( 'read' === $action ) {
+		$id = (int) wpcf7_superglobal_get( 'post' );
+
+		check_admin_referer( 'ct-wpcf7-submission_' . $id );
+
+		$query = array();
+		$updated = update_post_meta( $id, '_ct_submission_read', 1 );
+
+		if ( $updated ) {
+			$query['post'] = $id;
+			$query['message'] = 'marked-read';
+		}
+
+		$redirect_to = add_query_arg(
+			$query,
+			menu_page_url( 'ct-wpcf7-submissions', false )
+		);
+
+		wp_safe_redirect( $redirect_to );
+		exit();
+	}
 
 	if ( ! class_exists( Submissions_List_Table::class ) ) {
 		require_once __DIR__ . '/class-submissions-list-table.php';

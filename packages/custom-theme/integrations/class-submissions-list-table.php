@@ -15,6 +15,10 @@ class Submissions_List_Table extends WP_List_Table {
 		) );
 	}
 
+	public static function read_status( WP_Post $item ) {
+		return (int) get_post_meta( $item->ID, '_ct_submission_read', true );
+	}
+
 	public function __construct(
 		private ?WPCF7_ContactForm $contact_form = null,
 	) {
@@ -84,6 +88,40 @@ class Submissions_List_Table extends WP_List_Table {
 		return '';
 	}
 
+	protected function handle_row_actions( $item, $column_name, $primary ) {
+		if ( $column_name !== $primary ) {
+			return '';
+		}
+
+		$actions = array(
+			'view' => sprintf(
+				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
+				ct_wpcf7_submission_link( $item, 'view' ),
+				esc_attr( sprintf(
+					/* translators: %s: title of contact form */
+					__( 'View "%s"', 'custom-theme' ),
+					$item->post_title
+				) ),
+				__( 'View', 'custom-theme' ),
+			),
+		);
+
+		if ( static::read_status( $item ) === 0 ) {
+			$actions['read'] = sprintf(
+				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
+				ct_wpcf7_submission_link( $item, 'read', 'ct-wpcf7-submission_' ),
+				esc_attr( sprintf(
+					/* translators: %s: title of contact form */
+					__( 'Mark "%s" as read', 'custom-theme' ),
+					$item->post_title,
+				) ),
+				__( 'Mark as read', 'custom-theme' ),
+			);
+		}
+
+		return $this->row_actions( $actions );
+	}
+
 	public function column_cb( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="%1$s[]" value="%2$s" />',
@@ -94,21 +132,16 @@ class Submissions_List_Table extends WP_List_Table {
 
 	public function column_title( WP_Post $item ) {
 		$output = sprintf(
-			'<a class="row-title" href="%1$s" aria-label="%2$s">%3$s</a>',
+			'<a class="%4$s" href="%1$s" aria-label="%2$s">%3$s</a>',
 			ct_wpcf7_submission_link( $item ),
 			esc_attr( sprintf(
-				/* translators: %s: title of contact form */
+				/* translators: %s: title of submission */
 				__( 'View &#8220;%s&#8221;', 'custom-theme' ),
 				$item->post_title
 			) ),
-			esc_html( $item->post_title )
+			esc_html( $item->post_title ),
+			static::read_status( $item ) === 0 ? 'row-title' : ''
 		);
-
-		$read_status = (int) get_post_meta( $item->ID, '_ct_submission_read', true );
-
-		if ( $read_status === 0 ) {
-			return sprintf( '<strong>%s</strong>', $output );
-		}
 
 		return $output;
 	}
