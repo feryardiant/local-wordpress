@@ -1,18 +1,30 @@
+.contact_page_wpcf7-entry-manager {
+    --base-border-color: #c3c4c7;
+    --secondary-background-color: #f6f7f7;
+    --secondary-text-color: #a2a2a2;
+
+    .fixed .column-author {
+        width: 15%;
+    }
+
+    .fixed .column-form {
+        width: 10%;
+    }
+
+    .fixed .column-title {
+        width: auto;
+    }
+}
+
 #poststuff .wpcf7em-box .inside {
     margin: 0;
     padding: 0;
     line-height: 1.2em;
 
-    p { margin: 0; font-size: inherit; line-height: 1.6em }
-    ol, ul { margin-top: 0; margin-bottom: 0; font-size: inherit; line-height: 1.6em }
-    li { margin-bottom: 0; font-size: inherit; line-height: 1.6em }
+    p { margin: 0; font-size: inherit; line-height: 20px; }
+    ol, ul { margin-top: 0; margin-bottom: 0; font-size: inherit; line-height: 20px; }
+    li { margin-bottom: 0; font-size: inherit; line-height: 20px; }
     span { line-height: inherit; }
-}
-
-.wpcf7em-box {
-    --base-border-color: #c3c4c7;
-    --secondary-background-color: #f6f7f7;
-    --secondary-text-color: #a2a2a2;
 }
 
 #wpcf7em-entry .inside {
