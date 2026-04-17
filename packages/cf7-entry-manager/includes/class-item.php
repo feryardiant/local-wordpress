@@ -131,6 +131,7 @@ final class Item {
 			'user_email' => $option->email,
 			'display_name' => $option->name,
 			'user_pass' => \wp_generate_password( 12, true ),
+			'role' => 'subscriber',
 		);
 
 		$name_parts = explode( ' ', $option->name );
