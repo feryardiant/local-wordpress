@@ -59,6 +59,7 @@ add_action( 'wpcf7_init', static function() {
 	require_once __DIR__ . '/includes/admin.php';
 
 	require_once __DIR__ . '/includes/class-item.php';
+	require_once __DIR__ . '/includes/class-page_element.php';
 	require_once __DIR__ . '/includes/class-list_table.php';
 	require_once __DIR__ . '/includes/class-option.php';
 } );
@@ -82,7 +83,7 @@ add_action( 'init', static function() {
 		'labels' => $labels,
 		'description' => 'List of form submissions.',
 		'public' => false,
-		'show_ui' => false,
+		'show_ui' => true,
 		'show_in_nav_menus' => false,
 		'show_in_admin_bar' => false,
 		'capability_type' => 'post',

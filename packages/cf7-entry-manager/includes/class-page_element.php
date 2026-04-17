@@ -226,6 +226,15 @@ final class Page_Element {
 
 		$this->formatter->end_tag( $method );
 
+		$comment = implode( '', array_filter( array(
+			( ! empty( $atts['id'] ?? null ) ? '#' . $atts['id'] : null ),
+			( ! empty( $atts['class'] ?? null ) ? '.' . explode( ' ', $atts['class'] )[0] : null ),
+		) ) );
+
+		if ( ! empty( $comment ) ) {
+			$this->formatter->append_comment("<!-- /{$comment} -->");
+		}
+
 		return $this;
 	}
 
