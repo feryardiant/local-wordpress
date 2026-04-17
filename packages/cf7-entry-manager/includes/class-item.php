@@ -180,9 +180,11 @@ final class Item {
 		$this->datetime = \get_post_datetime( $item?->ID ?? null ) ?: null;
 		$this->read_status = (int) \get_post_meta( $this->id, '_wpcf7em_read_status', true );
 
-		$this->author_name = \get_user_meta( $this->author_id, 'display_name', true );
-		$this->author_email = \get_user_meta( $this->author_id, 'user_email', true );
-		$this->author_phone = \get_user_meta( $this->author_id, 'user_phone', true );
+		$author = $this->author();
+
+		$this->author_name = empty( $author?->display_name ) ? null : $author?->display_name;
+		$this->author_email = empty( $author?->user_email ) ? null : $author?->user_email;
+		$this->author_phone = empty( $author?->user_phone ) ? null : $author?->user_phone;
 
 		$submission = array();
 
