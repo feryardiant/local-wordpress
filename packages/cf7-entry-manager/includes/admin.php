@@ -286,6 +286,15 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
  * @internal
  */
 function admin_management_page(): void {
+	$action = \wpcf7_superglobal_request( 'action', null );
+	$item = \wpcf7_superglobal_request( 'post', null );
+
+	if ( 'view' === $action && $item = new Item( $item ) ) {
+		require_once __DIR__ . '/view-entry.php';
+
+		return;
+	}
+
 	$list_table = new List_Table();
 	$post_type_object = \get_post_type_object( 'form-submissions' );
 
