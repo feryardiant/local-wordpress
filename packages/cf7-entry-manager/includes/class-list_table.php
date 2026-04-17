@@ -203,7 +203,7 @@ class List_Table extends WP_List_Table {
 		}
 
 		return sprintf(
-			'<span aria-hidden="true">—</span><span class="screen-reader-text">%s</span>',
+			'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
 			__( 'no author', 'wpcf7-entry-manager' )
 		);
 	}
@@ -217,7 +217,7 @@ class List_Table extends WP_List_Table {
 		}
 
 		return sprintf(
-			'<span aria-hidden="true">—</span><span class="screen-reader-text">%s</span>',
+			'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
 			__( 'no form', 'wpcf7-entry-manager' )
 		);
 	}

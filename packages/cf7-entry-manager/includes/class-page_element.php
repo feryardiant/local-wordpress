@@ -287,7 +287,7 @@ final class Page_Element {
 	 */
 	public function when( bool|Closure $condition, Closure $met, ?Closure $unmet = null ): static {
 		if ( $condition instanceof Closure ) {
-			$condition = call_user_func( $condition );
+			$condition = (bool) call_user_func( $condition );
 		}
 
 		if ( $condition ) {

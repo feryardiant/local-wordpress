@@ -180,8 +180,8 @@ $element->div( array(
 												'file' => $element->p( child: esc_html( $value ?: 'No file uploaded' ) ),
 
 												'acceptance' => $element->p( child: boolval( $value )
-													? __( 'Accepted', 'cf7-entry-manager' )
-													: __( 'Not accepted', 'cf7-entry-manager' )
+													? __( 'Accepted', 'wpcf7-entry-manager' )
+													: __( 'Not accepted', 'wpcf7-entry-manager' )
 												),
 
 												default => $element->p( child: esc_html( $value ?: 'No answer' ) ),
@@ -212,8 +212,10 @@ $element->div( array(
 															array_unshift( $options, 'optional' );
 														}
 
-														$element->p( child: esc_html( __(
-															sprintf( 'Options: %s', implode( ', ', $options ) )
+														$element->p( child: esc_html( sprintf(
+															/* translators: %s: comma-separated list of form tag options */
+															__( 'Options: %s', 'wpcf7-entry-manager' ),
+															implode( ', ', $options )
 														) ) );
 													}
 												)
@@ -222,7 +224,7 @@ $element->div( array(
 												->p( array( 'class' => 'wpcf7em-submission-content' ), $tag->content )
 											)
 											->when( $tag->basetype === 'quiz', static fn ( $element ) => $element
-												->p( child: __( 'Questions', 'cf7-entry-manager' ) )
+												->p( child: __( 'Questions', 'wpcf7-entry-manager' ) )
 												->ol(
 													child: static function ( $element ) use ( $tag ) {
 														foreach ( $tag->raw_values as $i => $option ) {
