@@ -1,0 +1,79 @@
+#poststuff .wpcf7em-box .inside {
+    margin: 0;
+    padding: 0;
+    line-height: 1.2em;
+}
+
+#wpcf7em-entry .inside {
+    font-size: 14px;
+}
+
+.wpcf7em-box-header,
+.wpcf7em-box-footer,
+.wpcf7em-row {
+    display: flex;
+    position: relative;
+}
+
+.wpcf7em-box-header {
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.wpcf7em-row {
+    border-bottom: 1px solid var(--optionBorderColor);
+    flex-flow: row wrap;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.wpcf7em-submission {
+    p { margin: 0; font-size: inherit; line-height: 1.6em }
+    ol, ul { margin-top: 0; margin-bottom: 0; font-size: inherit; line-height: 1.6em }
+    li { margin-bottom: 0; font-size: inherit; line-height: 1.6em }
+    span { line-height: inherit; }
+
+    .wpcf7em-col {
+        /*display: inline-flex;*/
+        flex: 1 auto;
+        padding: 1em;
+        box-sizing: border-box;
+    }
+
+    .wpcf7em-submission-field {
+        width: 20%;
+        text-align: right;
+    }
+
+    .wpcf7em-submission-value {
+        width: 40%;
+    }
+
+    &:not(.field-no-answer) .wpcf7em-submission-value {
+        font-weight: 600;
+    }
+
+    &.field-no-answer .wpcf7em-submission-value {
+       color: #a2a2a2;
+    }
+
+    &.field-no-answer .wpcf7em-submission-value,
+   .wpcf7em-submission-info {
+       font-style: italic;
+    }
+
+    .wpcf7em-submission-info {
+        border-left: 1px solid var(--optionBorderColor);
+        width: 40%;
+        background-color: #f6f7f7;
+    }
+
+    .wpcf7em-type-select,
+    .wpcf7em-type-checkbox,
+    .wpcf7em-type-radio {
+        li:not(.selected) {
+            color: #a2a2a2;
+        }
+    }
+}
