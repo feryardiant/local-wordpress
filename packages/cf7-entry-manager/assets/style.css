@@ -9,6 +9,12 @@
     span { line-height: inherit; }
 }
 
+.wpcf7em-box {
+    --base-border-color: #c3c4c7;
+    --secondary-background-color: #f6f7f7;
+    --secondary-text-color: #a2a2a2;
+}
+
 #wpcf7em-entry .inside {
     font-size: 14px;
 }
@@ -23,16 +29,19 @@
 .wpcf7em-box-header {
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #c3c4c7;
+    border-bottom: 1px solid var(--base-border-color);
 }
 
 .wpcf7em-box-footer {
     padding: 10px;
-    border-top: 1px solid #dcdcde;
-    background: #f6f7f7;
+    border-top: 1px solid var(--base-border-color);
+    background: var(--secondary-background-color);
 }
 
 .wpcf7em-row {
+    --base-padding-x: 14px;
+    --base-padding-y: 10px;
+
     flex-flow: row wrap;
     align-items: stretch;
     align-content: stretch;
@@ -42,33 +51,22 @@
     }
 }
 
-.wpcf7em-info,
-.wpcf7em-submission{
-    .wpcf7em-col {
-        flex: 1 auto;
-        box-sizing: border-box;
-    }
+.wpcf7em-col {
+    padding: var(--base-padding-y) var(--base-padding-x);
+    flex: 1 auto;
+    box-sizing: border-box;
 }
 
 .wpcf7em-info {
-    --info-padding: 10px;
-
-    .wpcf7em-col {
-        padding-top: var(--info-padding);
-        padding-bottom: var(--info-padding);
-    }
-
     .wpcf7em-info-field {
         width: 30%;
         text-align: right;
-        padding-left: var(--info-padding);
+        padding-right: 0;
     }
 
     .wpcf7em-info-value {
         font-weight: 600;
         width: 70%;
-        padding-left: var(--info-padding);
-        padding-right: var(--info-padding);
     }
 
     .avatar {
@@ -81,10 +79,6 @@
 }
 
 .wpcf7em-submission {
-    .wpcf7em-col {
-        padding: 1em;
-    }
-
     .wpcf7em-submission-field {
         width: 20%;
         text-align: right;
@@ -92,6 +86,7 @@
 
     .wpcf7em-submission-value {
         width: 40%;
+        padding-left: 0;
     }
 
     &:not(.field-no-answer) .wpcf7em-submission-value {
@@ -99,7 +94,7 @@
     }
 
     &.field-no-answer .wpcf7em-submission-value {
-       color: #a2a2a2;
+       color: var(--secondary-text-color);
     }
 
     &.field-no-answer .wpcf7em-submission-value,
@@ -110,14 +105,14 @@
     .wpcf7em-submission-info {
         border-left: 1px solid var(--optionBorderColor);
         width: 40%;
-        background-color: #f6f7f7;
+        background-color: var(--secondary-background-color);
     }
 
     .wpcf7em-type-select,
     .wpcf7em-type-checkbox,
     .wpcf7em-type-radio {
         li:not(.selected) {
-            color: #a2a2a2;
+            color: var(--secondary-text-color);
         }
     }
 }
