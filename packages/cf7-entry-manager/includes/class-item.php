@@ -221,4 +221,16 @@ final class Item {
 
 		return \esc_url( $link );
 	}
+
+	/**
+	 * Helper method that return current user capability for this submission item.
+	 *
+	 * @see \current_user_can()
+	 *
+	 * @param string $capability
+	 * @return bool
+	 */
+	public function current_user_can( string $capability ): bool {
+		return \current_user_can( $capability, $this->id );
+	}
 }
