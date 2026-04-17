@@ -2,6 +2,11 @@
     margin: 0;
     padding: 0;
     line-height: 1.2em;
+
+    p { margin: 0; font-size: inherit; line-height: 1.6em }
+    ol, ul { margin-top: 0; margin-bottom: 0; font-size: inherit; line-height: 1.6em }
+    li { margin-bottom: 0; font-size: inherit; line-height: 1.6em }
+    span { line-height: inherit; }
 }
 
 #wpcf7em-entry .inside {
@@ -21,24 +26,63 @@
     border-bottom: 1px solid #c3c4c7;
 }
 
+.wpcf7em-box-footer {
+    padding: 10px;
+    border-top: 1px solid #dcdcde;
+    background: #f6f7f7;
+}
+
 .wpcf7em-row {
-    border-bottom: 1px solid var(--optionBorderColor);
     flex-flow: row wrap;
     align-items: stretch;
     align-content: stretch;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid var(--optionBorderColor);
+    }
+}
+
+.wpcf7em-info,
+.wpcf7em-submission{
+    .wpcf7em-col {
+        flex: 1 auto;
+        box-sizing: border-box;
+    }
+}
+
+.wpcf7em-info {
+    --info-padding: 10px;
+
+    .wpcf7em-col {
+        padding-top: var(--info-padding);
+        padding-bottom: var(--info-padding);
+    }
+
+    .wpcf7em-info-field {
+        width: 30%;
+        text-align: right;
+        padding-left: var(--info-padding);
+    }
+
+    .wpcf7em-info-value {
+        font-weight: 600;
+        width: 70%;
+        padding-left: var(--info-padding);
+        padding-right: var(--info-padding);
+    }
+
+    .avatar {
+        max-width: 100%;
+        width: 64px;
+        height: auto;
+        border-radius: 50%;
+        border: 1px solid var(--optionBorderColor);
+    }
 }
 
 .wpcf7em-submission {
-    p { margin: 0; font-size: inherit; line-height: 1.6em }
-    ol, ul { margin-top: 0; margin-bottom: 0; font-size: inherit; line-height: 1.6em }
-    li { margin-bottom: 0; font-size: inherit; line-height: 1.6em }
-    span { line-height: inherit; }
-
     .wpcf7em-col {
-        /*display: inline-flex;*/
-        flex: 1 auto;
         padding: 1em;
-        box-sizing: border-box;
     }
 
     .wpcf7em-submission-field {

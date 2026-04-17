@@ -267,38 +267,33 @@ final class Page_Element {
 		return $this;
 	}
 
-	public function call_when( bool|callable $condition, \Closure $do, mixed ...$params ): static {
+	public function call_when( bool|callable $condition, \Closure $met, mixed ...$params ): static {
 		if ( is_callable( $condition ) ) {
 			$condition = call_user_func( $condition );
 		}
 
 		if ( $condition ) {
-			return $this->call( $do, ...$params );
+			return $this->call( $met, ...$params );
 		}
 
 		return $this;
 	}
 
 	/**
-	 * @param bool|callable $condition
-	 * @param Closure(T) $do
+	 * @param bool|Closure $condition
+	 * @param Closure(T) $met
+	 * @param ?Closure(T) $unmet
 	 * @return T|void
 	 */
-	public function when( bool|callable $condition, \Closure|Page_Element $do ): static {
-		if ( is_callable( $condition ) ) {
+	public function when( bool|Closure $condition, Closure $met, ?Closure $unmet = null ): static {
+		if ( $condition instanceof Closure ) {
 			$condition = call_user_func( $condition );
 		}
 
-		if ( $condition instanceof Page_Element ) {
-			$do = fn () => $do;
-		}
-
 		if ( $condition ) {
-			$return = $do( $this );
-
-			if ( $return instanceof static) {
-				return $return;
-			}
+			$met( $this );
+		} else {
+			$unmet && $unmet( $this );
 		}
 
 		return $this;
