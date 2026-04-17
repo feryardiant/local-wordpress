@@ -257,7 +257,8 @@ function admin_management_page(): void {
 	$action = \wpcf7_superglobal_request( 'action', null );
 	$item = \wpcf7_superglobal_request( 'post', null );
 
-	if ( 'view' === $action && $item = new Item( $item ) ) {
+	if ( 'view' === $action && $item ) {
+		$item = new Item( $item );
 		$item->mark_read();
 
 		require_once __DIR__ . '/view-entry.php';

@@ -77,7 +77,7 @@ final class Item {
 		$returned_id = \wp_insert_post( array(
 			'post_type' => 'form-submissions',
 			'post_status' => 'publish',
-			'post_title' => $option->subject ?? sprintf(
+			'post_title' => $option->subject ?: sprintf(
 				/* translators: %s: Contact form title */
 				__( 'Submission for "%s"', 'wpcf7-entry-manager' ),
 				$form->title()

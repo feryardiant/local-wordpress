@@ -219,7 +219,7 @@ final class Page_Element {
 				$this->within_element = false;
 			} else {
 				throw new \TypeError( sprintf(
-					'%s::%s(): Argument #2 ($child) must be of type callable|string, %s given',
+					'%s::%s(): Argument #2 ($child) must be of type Closure|string, %s given',
 					__CLASS__, $method, gettype( $child )
 				) );
 			}
@@ -239,7 +239,7 @@ final class Page_Element {
 		return $this;
 	}
 
-	public function whilespace(): static {
+	public function whitespace(): static {
 		$this->formatter->append_preformatted( ' ' );
 
 		return $this;
@@ -257,6 +257,10 @@ final class Page_Element {
 		}
 
 		$this->formatter->append_start_tag( $mode, array( 'class' => 'clear' ) );
+
+		if ( $mode !== 'br' ) {
+			$this->formatter->append_end_tag( $mode );
+		}
 
 		return $this;
 	}

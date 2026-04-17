@@ -61,7 +61,10 @@ class List_Table extends WP_List_Table {
 			$args['s'] = $search_keyword;
 		}
 
-		if ( $order_by = \wpcf7_superglobal_request( 'orderby' ) ) {
+		$sortable = array_keys( $this->get_sortable_columns() );
+		$order_by = \wpcf7_superglobal_request( 'orderby' );
+
+		if ( $order_by && in_array( $order_by, $sortable, true ) ) {
 			$args['orderby'] = $order_by;
 		}
 
@@ -78,10 +81,11 @@ class List_Table extends WP_List_Table {
 		}
 
 		$total_items = $q->found_posts;
+		$per_page = max( 1, (int) $per_page );
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
-			'total_pages' => ceil( $total_items / $per_page ),
+			'total_pages' => (int) ceil( $total_items / $per_page ),
 			'per_page' => $per_page,
 		) );
 	}

@@ -18,14 +18,41 @@
  */
 
 define( 'CF7EM_VERSION', '0.0.0' );
+define( 'CF7EM_DEBUG', defined( 'WP_DEBUG' ) && boolval( WP_DEBUG ) );
 define( 'CF7EM__MINIMUM_WP_VERSION', '6.8' );
 define( 'CF7EM__MINIMUM_PHP_VERSION', '8.1' );
 
 /**
  * Check if the version of WordPress in use on the site is supported by Entry Manager for Contact Form 7.
  */
+if ( version_compare( PHP_VERSION, CF7EM__MINIMUM_PHP_VERSION, '<' ) ) {
+	if ( CF7EM_DEBUG ) {
+		error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			sprintf(
+				/* translators: Placeholders are numbers, versions of PHP in use on the site, and required by PHP. */
+				esc_html__( 'Your version of PHP (%1$s) is lower than the version required by Entry Manager for Contact Form 7 (%2$s). Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'wpcf7-entry-manager' ),
+				PHP_VERSION,
+				CF7EM__MINIMUM_PHP_VERSION
+			)
+		);
+	}
+
+	add_action( 'admin_notices', static function () {
+		?>
+		<div class="notice notice-error is-dismissible">
+			<p><?php esc_html_e( 'Entry Manager for Contact Form 7 requires a more recent version of PHP and has been paused. Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'wpcf7-entry-manager' ); ?></p>
+		</div>
+		<?php
+	} );
+
+	return;
+}
+
+/**
+ * Check if the version of WordPress in use on the site is supported by Entry Manager for Contact Form 7.
+ */
 if ( version_compare( $GLOBALS['wp_version'], CF7EM__MINIMUM_WP_VERSION, '<' ) ) {
-	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+	if ( CF7EM_DEBUG ) {
 		error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			sprintf(
 				/* translators: Placeholders are numbers, versions of WordPress in use on the site, and required by WordPress. */
@@ -62,7 +89,7 @@ add_action(
 			return;
 		}
 
-		wp_enqueue_style( 'my_custom_script', plugin_dir_url( __FILE__ ) . 'assets/style.css', array(), CF7EM_VERSION );
+		wp_enqueue_style( 'wpcf7-entry-manager-style', plugin_dir_url( __FILE__ ) . 'assets/style.css', array(), CF7EM_VERSION );
 	},
 	10, 1
 );
@@ -104,9 +131,9 @@ add_action( 'init', static function() {
 		'rewrite' => array( 'slug' => 'submission' ),
 		'query_var' => true,
 		'menu_icon' => 'dashicons-email-alt',
-		'register_meta_box_cb' => static function( WP_Post $post ) {
-			// Doing nothing for now.
-		},
+		// 'register_meta_box_cb' => static function( WP_Post $post ) {
+		// 	// Doing nothing for now.
+		// },
 	) );
 
 	/**

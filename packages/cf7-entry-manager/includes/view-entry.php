@@ -190,14 +190,14 @@ $element->div( array(
 													}
 												),
 
-												'file' => $element->p( child: esc_html( $value ?: 'No file uploaded' ) ),
+												'file' => $element->p( child: esc_html( $value ?: __( 'No file uploaded', 'wpcf7-entry-manager' ) ) ),
 
 												'acceptance' => $element->p( child: boolval( $value )
 													? __( 'Accepted', 'wpcf7-entry-manager' )
 													: __( 'Not accepted', 'wpcf7-entry-manager' )
 												),
 
-												default => $element->p( child: esc_html( $value ?: 'No answer' ) ),
+												default => $element->p( child: esc_html( $value ?: __( 'No answer', 'wpcf7-entry-manager' ) ) ),
 											}
 										)
 										->div( array( 'class' => 'wpcf7em-col wpcf7em-submission-info' ),
