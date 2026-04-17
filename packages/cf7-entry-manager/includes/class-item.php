@@ -101,9 +101,9 @@ final class Item {
 			'post_author' => self::store_author( $option ),
 			'post_excerpt' => $option->message,
 			// 'post_content' => null,
-		) );
+		), true );
 
-		if ( ! \is_wp_error( $returned_id ) ) {
+		if ( ! \is_wp_error( $returned_id ) && $returned_id > 0 ) {
 			foreach ( $form_data as $field => $value ) {
 				\add_post_meta( $returned_id, $field, $value );
 			}
