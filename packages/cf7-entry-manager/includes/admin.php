@@ -174,8 +174,10 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 					) );
 
 					if ( $field['type'] === 'separator' ) {
-						$element->td( array( 'colspan' => '2', 'style' => 'padding: 0;' ),
-							static fn ( $element ) => $element->hr()
+						$element->tr( child: static fn ( $element ) => $element
+							->td( array( 'colspan' => '2', 'style' => 'padding: 0;' ),
+								static fn ( $element ) => $element->hr()
+							)
 						);
 
 						continue;
