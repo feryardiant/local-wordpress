@@ -65,16 +65,24 @@
     }
 
     .wpcf7em-info-value {
-        font-weight: 600;
         width: 70%;
+
+        &:not(.wpcf7em-no-value) {
+            font-weight: 600;
+        }
+
+        &.wpcf7em-no-value {
+            font-style: italic;
+            color: var(--secondary-text-color);
+        }
     }
 
     .avatar {
-        max-width: 100%;
-        width: 64px;
-        height: auto;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        border: 1px solid var(--optionBorderColor);
+        border: 2px solid var(--optionBorderColor);
+        background-color: #c3c3c3;
     }
 }
 

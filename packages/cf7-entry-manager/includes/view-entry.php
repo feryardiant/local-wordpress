@@ -86,19 +86,7 @@ $element->div( array(
 								static fn ( $element ) => $element
 								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-field' ),
 									static fn ( $element ) => $element
-									->p( child: __( 'Form', 'wpcf7-entry-manager' ) )
-								)
-								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value' ),
-									static fn ( $element ) => $element
-									->p( child: esc_html( $item->form()->title() ) )
-								)
-							) // .wpcf7em-row
-
-							->div( array( 'class' => 'wpcf7em-row wpcf7em-info' ),
-								static fn ( $element ) => $element
-								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-field' ),
-									static fn ( $element ) => $element
-									->p( child: __( 'Date', 'wpcf7-entry-manager' ) )
+									->p( child: __( 'Submitted', 'wpcf7-entry-manager' ) )
 								)
 								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value' ),
 									static fn ( $element ) => $element
@@ -110,17 +98,42 @@ $element->div( array(
 								static fn ( $element ) => $element
 								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-field' ),
 									static fn ( $element ) => $element
+									->p( child: __( 'Form', 'wpcf7-entry-manager' ) )
+								)
+								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value ' . ( $item->form_id ? '' : 'wpcf7em-no-value' ) ),
+									static fn ( $element ) => $element
+									->p( child: ( $form = $item->form() ) ? esc_html( $form->title() ) : sprintf(
+										'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
+										__( 'no form', 'wpcf7-entry-manager' )
+									) )
+								)
+							) // .wpcf7em-row
+
+							->div( array( 'class' => 'wpcf7em-row wpcf7em-info' ),
+								static fn ( $element ) => $element
+								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-field' ),
+									static fn ( $element ) => $element
 									->img( array(
 										'class' => 'avatar photo',
-										'src' => get_avatar_url( $item->author()->ID ),
+										'src' => get_avatar_url( $item->author_id ),
 										'loading' => 'lazy',
 									) )
 								)
-								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value' ),
+								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value ' . ( $item->author_id ? '' : 'wpcf7em-no-value' ) ),
 									static fn ( $element ) => $element
-									->p( child: esc_html( $item->author()->display_name ) )
-									->p( child: esc_html( $item->author()->user_email ) )
-									->p( child: esc_html( $item->author()->user_phone ) )
+									->p( child: ( $author = $item->author() ) ? esc_html( $author->display_name ) : sprintf(
+										'<span aria-hidden="true">%s</span><span class="screen-reader-text">(%s)</span>',
+										__( 'Anonymous', 'wpcf7-entry-manager' ),
+										__( 'no author info', 'wpcf7-entry-manager' )
+									) )
+									->p( child: ( $author = $item->author() ) ? esc_html( $author->user_email ) : sprintf(
+										'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
+										__( 'no email info', 'wpcf7-entry-manager' )
+									) )
+									->p( child: ( $author = $item->author() ) ? esc_html( $author->user_phone ) : sprintf(
+										'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
+										__( 'no phone info', 'wpcf7-entry-manager' )
+									) )
 								)
 							) // .wpcf7em-row
 						), // .inside
