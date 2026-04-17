@@ -97,7 +97,7 @@ final class Option implements ArrayAccess {
 
 		foreach ( $contact_form->scan_form_tags() as $tag ) {
 			/** @var \WPCF7_FormTag $tag */
-			if ( in_array( $tag->basetype, [ 'submit', 'button' ] ) ) {
+			if ( 'submit' === $tag->basetype ) {
 				continue;
 			}
 

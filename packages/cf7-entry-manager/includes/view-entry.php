@@ -219,7 +219,7 @@ $element->div( array(
 								foreach ( $item->form()->scan_form_tags() as $tag ) {
 									/** @var \WPCF7_FormTag $tag */
 
-									if ( in_array( $tag->basetype, array( 'submit', 'button' ) ) ) {
+									if ( 'submit' === $tag->basetype ) {
 										continue;
 									}
 
