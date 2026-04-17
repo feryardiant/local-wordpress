@@ -210,7 +210,7 @@ class List_Table extends WP_List_Table {
 	 */
 	public function column_form( Item $item ): string {
 		if ( $form = $item->form() ) {
-			return \esc_html( $form->post_title );
+			return \esc_html( $form->title() );
 		}
 
 		return '<span aria-hidden="true">—</span><span class="screen-reader-text">(no form)</span>';

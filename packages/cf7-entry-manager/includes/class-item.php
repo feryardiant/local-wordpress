@@ -21,7 +21,7 @@ final class Item {
 	/**
 	 * Submission Form ID.
 	 */
-	public readonly ?int $parent_id;
+	public readonly ?int $form_id;
 
 	/**
 	 * Submission Author ID.
@@ -152,7 +152,7 @@ final class Item {
 
 		$this->id = $item?->ID;
 		$this->title = $item?->post_title;
-		$this->parent_id = $item?->post_parent;
+		$this->form_id = $item?->post_parent;
 		$this->author_id = $item?->post_author;
 		$this->message = $item?->post_excerpt;
 		$this->datetime = \get_post_datetime( $item?->ID ?? null ) ?: null;
@@ -162,8 +162,8 @@ final class Item {
 	/**
 	 * Get the form post for this submission item.
 	 */
-	public function form(): ?WP_Post {
-		return $this->parent_id ? \get_post( $this->parent_id ) : null;
+	public function form(): ?WPCF7_ContactForm {
+		return $this->form_id ? WPCF7_ContactForm::get_instance( $this->form_id ) : null;
 	}
 
 	/**
