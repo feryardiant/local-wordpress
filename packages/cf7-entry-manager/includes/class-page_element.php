@@ -202,7 +202,7 @@ final class Page_Element {
 
 		$child = $args[1] ?? $args['child'] ?? null;
 
-		if ( ! empty( $child ) ) {
+		if ( null !== $child ) {
 			if ( is_string( $child )) {
 				$this->formatter->append_preformatted( $child );
 			} elseif ( $child instanceof Closure ) {

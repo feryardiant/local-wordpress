@@ -168,9 +168,10 @@ $element->div( array(
 									}
 
 									$value = $item->submission[ $tag->name ] ?? '';
+									$has_value = '' !== $value && null !== $value;
 
 									$element->div( array(
-										'class' => 'wpcf7em-row wpcf7em-submission ' . ( empty( $value ) ? 'field-no-answer' : 'field-answered' ),
+										'class' => 'wpcf7em-row wpcf7em-submission ' . ( $has_value ? 'field-answered' : 'field-no-answer' ),
 									), static fn ( $element ) => $element
 										->div( array( 'class' => 'wpcf7em-col wpcf7em-submission-field' ),
 											static fn ( $element ) => $element->p( child: esc_html( $tag->name ) )
@@ -196,14 +197,14 @@ $element->div( array(
 													}
 												),
 
-												'file' => $element->p( child: esc_html( $value ?: __( 'No file uploaded', 'wpcf7-entry-manager' ) ) ),
+												'file' => $element->p( child: esc_html( $has_value ? $value : __( 'No file uploaded', 'wpcf7-entry-manager' ) ) ),
 
 												'acceptance' => $element->p( child: boolval( $value )
 													? __( 'Accepted', 'wpcf7-entry-manager' )
 													: __( 'Not accepted', 'wpcf7-entry-manager' )
 												),
 
-												default => $element->p( child: esc_html( $value ?: __( 'No answer', 'wpcf7-entry-manager' ) ) ),
+												default => $element->p( child: esc_html( $has_value ? $value : __( 'No answer', 'wpcf7-entry-manager' ) ) ),
 											}
 										)
 										->div( array( 'class' => 'wpcf7em-col wpcf7em-submission-info' ),

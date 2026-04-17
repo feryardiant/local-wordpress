@@ -46,7 +46,7 @@ class List_Table extends WP_List_Table {
 	 * Prepare the items for the submissions list table.
 	 */
 	public function prepare_items() {
-		$per_page = $this->get_items_per_page( 'wpcf7em_submissions_per_page' );
+		$per_page = max( 1, (int) $this->get_items_per_page( 'wpcf7em_submissions_per_page' ) );
 
 		$args = array(
 			'post_type' => 'form-submissions',
@@ -81,7 +81,6 @@ class List_Table extends WP_List_Table {
 		}
 
 		$total_items = $q->found_posts;
-		$per_page = max( 1, (int) $per_page );
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_items,
