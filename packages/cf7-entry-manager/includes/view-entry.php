@@ -121,19 +121,25 @@ $element->div( array(
 								)
 								->div( array( 'class' => 'wpcf7em-col wpcf7em-info-value ' . ( $item->author_id ? '' : 'wpcf7em-no-value' ) ),
 									static fn ( $element ) => $element
-									->p( child: ( $author = $item->author() ) ? esc_html( $author->display_name ) : sprintf(
-										'<span aria-hidden="true">%s</span><span class="screen-reader-text">(%s)</span>',
-										__( 'Anonymous', 'wpcf7-entry-manager' ),
-										__( 'no author info', 'wpcf7-entry-manager' )
-									) )
-									->p( child: ( $author = $item->author() ) ? esc_html( $author->user_email ) : sprintf(
-										'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
-										__( 'no email info', 'wpcf7-entry-manager' )
-									) )
-									->p( child: ( $author = $item->author() ) ? esc_html( $author->user_phone ) : sprintf(
-										'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
-										__( 'no phone info', 'wpcf7-entry-manager' )
-									) )
+									->p( array( 'class' => $item->author_name ? '' : 'wpcf7em-no-value' ),
+										$item->author_name ? esc_html( $item->author_name ) : sprintf(
+											'<span aria-hidden="true">%s</span><span class="screen-reader-text">(%s)</span>',
+											__( 'Anonymous', 'wpcf7-entry-manager' ),
+											__( 'no author info', 'wpcf7-entry-manager' )
+										)
+									)
+									->p( array( 'class' => $item->author_email ? '' : 'wpcf7em-no-value' ),
+										$item->author_email ? esc_html( $item->author_email ) : sprintf(
+											'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
+											__( 'no email info', 'wpcf7-entry-manager' )
+										)
+									)
+									->p( array( 'class' => $item->author_phone ? '' : 'wpcf7em-no-value' ),
+										$item->author_phone ? esc_html( $item->author_phone ) : sprintf(
+											'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
+											__( 'no phone info', 'wpcf7-entry-manager' )
+										)
+									)
 								)
 							) // .wpcf7em-row
 						), // .inside

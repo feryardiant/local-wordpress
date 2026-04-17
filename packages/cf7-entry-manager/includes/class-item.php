@@ -29,6 +29,21 @@ final class Item {
 	public readonly ?int $author_id;
 
 	/**
+	 * Submission Author Name.
+	 */
+	public readonly ?string $author_name;
+
+	/**
+	 * Submission Author Email.
+	 */
+	public readonly ?string $author_email;
+
+	/**
+	 * Submission Author Phone.
+	 */
+	public readonly ?string $author_phone;
+
+	/**
 	 * Submission read status.
 	 * @var 0|1
 	 */
@@ -100,7 +115,7 @@ final class Item {
 	}
 
 	private static function store_author( Option $option ): int {
-		$could_store = ( $option->email && \is_email( $option->email ) ) && $option->name;
+		$could_store = ( $option->email && \is_email( $option->email ) );
 
 		if ( ! $option->store_author || ! $could_store ) {
 			return 0;
@@ -164,6 +179,10 @@ final class Item {
 		$this->message = $item?->post_excerpt;
 		$this->datetime = \get_post_datetime( $item?->ID ?? null ) ?: null;
 		$this->read_status = (int) \get_post_meta( $this->id, '_wpcf7em_read_status', true );
+
+		$this->author_name = \get_user_meta( $this->author_id, 'display_name', true );
+		$this->author_email = \get_user_meta( $this->author_id, 'user_email', true );
+		$this->author_phone = \get_user_meta( $this->author_id, 'user_phone', true );
 
 		$submission = array();
 
