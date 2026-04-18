@@ -19,7 +19,10 @@
     ],
     "scripts": {
         "lint": [
-            "phpcs -ps packages --standard=WordPress"
+            "phpcs -ps packages --standard=WordPress,PHPCompatibilityWP"
+        ],
+        "lint:fix": [
+            "phpcbf -ps packages --standard=WordPress,PHPCompatibilityWP"
         ]
     },
     "require": {
@@ -27,6 +30,7 @@
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
         "squizlabs/php_codesniffer": "^3.13",
         "wikimedia/composer-merge-plugin": "^2.1",
         "wp-coding-standards/wpcs": "^3.3"
