@@ -283,32 +283,31 @@ function admin_management_page(): void {
 		),
 	) );
 
-	$elm->div(
-		array( 'class' => 'wrap' ),
+	$elm->div( array( 'class' => 'wrap' ),
 		static fn ( $elm ) => $elm
-			->h1( array( 'class' => 'wp-heading-inline' ),
-				\esc_html( $post_type_object->labels->items_list )
-			)
+		->h1( array( 'class' => 'wp-heading-inline' ),
+			\esc_html( $post_type_object->labels->items_list )
+		)
 
-			->hr( array( 'class' => 'wp-header-end' ) )
+		->hr( array( 'class' => 'wp-header-end' ) )
 
-			->form( array( 'method' => 'get' ),
-				static fn ( $elm ) => $elm
-					->input( array(
-						'type' => 'hidden',
-						'name' => 'page',
-						'value' => 'wpcf7-entry-manager',
-					) )
+		->form( array( 'method' => 'get' ),
+			static fn ( $elm ) => $elm
+			->input( array(
+				'type' => 'hidden',
+				'name' => 'page',
+				'value' => 'wpcf7-entry-manager',
+			) )
 
-					->call( static function () use ( $list_table, $post_type_object ) {
-						$list_table->search_box(
-							$post_type_object->labels->search_items,
-							'wpcf7-entry-manager'
-						);
+			->call( static function () use ( $list_table, $post_type_object ) {
+				$list_table->search_box(
+					$post_type_object->labels->search_items,
+					'wpcf7-entry-manager'
+				);
 
-						$list_table->display();
-					} )
-			)
+				$list_table->display();
+			} )
+		)
 	);
 
 	$elm->render();
