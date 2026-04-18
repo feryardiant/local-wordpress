@@ -1,11 +1,11 @@
 <?php
 /**
- * @package feryardiant/wpcf7-entry-manager
+ * @package feryardiant/cf7-entry-manager
  * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  */
 
-namespace CF7_EntryManager;
+namespace CF7_Entry_Manager;
 
 use WP_List_Table;
 use WP_Query;
@@ -25,10 +25,10 @@ class List_Table extends WP_List_Table {
 	public static function define_column( array $columns ) {
 		return \wp_parse_args( $columns, array(
 			'cb' => '<input type="checkbox" />',
-			'title' => __( 'Subject', 'wpcf7-entry-manager' ),
-			'form' => __( 'Form', 'wpcf7-entry-manager' ),
-			'author' => __( 'Author', 'wpcf7-entry-manager' ),
-			'date' => __( 'Date', 'wpcf7-entry-manager' ),
+			'title' => __( 'Subject', 'cf7-entry-manager' ),
+			'form' => __( 'Form', 'cf7-entry-manager' ),
+			'author' => __( 'Author', 'cf7-entry-manager' ),
+			'date' => __( 'Date', 'cf7-entry-manager' ),
 		) );
 	}
 
@@ -46,7 +46,7 @@ class List_Table extends WP_List_Table {
 	 * Prepare the items for the submissions list table.
 	 */
 	public function prepare_items() {
-		$per_page = max( 1, (int) $this->get_items_per_page( 'wpcf7em_submissions_per_page' ) );
+		$per_page = max( 1, (int) $this->get_items_per_page( 'cf7em_submissions_per_page' ) );
 
 		$args = array(
 			'post_type' => 'form-submissions',
@@ -139,23 +139,23 @@ class List_Table extends WP_List_Table {
 				$item->url(),
 				\esc_attr( sprintf(
 					/* translators: %s: title of contact form */
-					__( 'View "%s"', 'wpcf7-entry-manager' ),
+					__( 'View "%s"', 'cf7-entry-manager' ),
 					$item->title
 				) ),
-				__( 'View', 'wpcf7-entry-manager' ),
+				__( 'View', 'cf7-entry-manager' ),
 			),
 		);
 
 		if ( $item->is_unread() ) {
 			$actions['read'] = sprintf(
 				'<a href="%1$s" aria-label="%2$s">%3$s</a>',
-				$item->url( 'read', 'wpcf7em-entry_' ),
+				$item->url( 'read', 'cf7em-entry_' ),
 				\esc_attr( sprintf(
 					/* translators: %s: title of contact form */
-					__( 'Mark "%s" as read', 'wpcf7-entry-manager' ),
+					__( 'Mark "%s" as read', 'cf7-entry-manager' ),
 					$item->title,
 				) ),
-				__( 'Mark as read', 'wpcf7-entry-manager' ),
+				__( 'Mark as read', 'cf7-entry-manager' ),
 			);
 		}
 
@@ -187,7 +187,7 @@ class List_Table extends WP_List_Table {
 			$item->url(),
 			\esc_attr( sprintf(
 				/* translators: %s: title of submission */
-				__( 'View &#8220;%s&#8221;', 'wpcf7-entry-manager' ),
+				__( 'View &#8220;%s&#8221;', 'cf7-entry-manager' ),
 				$item->title
 			) ),
 			\esc_html( $item->title ),
@@ -207,7 +207,7 @@ class List_Table extends WP_List_Table {
 
 		return sprintf(
 			'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
-			__( 'no author', 'wpcf7-entry-manager' )
+			__( 'no author', 'cf7-entry-manager' )
 		);
 	}
 
@@ -221,7 +221,7 @@ class List_Table extends WP_List_Table {
 
 		return sprintf(
 			'<span aria-hidden="true">—</span><span class="screen-reader-text">(%s)</span>',
-			__( 'no form', 'wpcf7-entry-manager' )
+			__( 'no form', 'cf7-entry-manager' )
 		);
 	}
 
@@ -235,11 +235,11 @@ class List_Table extends WP_List_Table {
 
 		return sprintf(
 			/* translators: 1: date, 2: time */
-			__( '%1$s at %2$s', 'wpcf7-entry-manager' ),
+			__( '%1$s at %2$s', 'cf7-entry-manager' ),
 			/* translators: date format, see https://www.php.net/date */
-			$item->datetime->format( __( 'Y/m/d', 'wpcf7-entry-manager' ) ),
+			$item->datetime->format( __( 'Y/m/d', 'cf7-entry-manager' ) ),
 			/* translators: time format, see https://www.php.net/date */
-			$item->datetime->format( __( 'g:i a', 'wpcf7-entry-manager' ) )
+			$item->datetime->format( __( 'g:i a', 'cf7-entry-manager' ) )
 		);
 	}
 }

@@ -1,11 +1,11 @@
 <?php
 /**
- * @package feryardiant/wpcf7-entry-manager
+ * @package feryardiant/cf7-entry-manager
  * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  */
 
-namespace CF7_EntryManager;
+namespace CF7_Entry_Manager;
 
 use Closure;
 use WPCF7_HTMLFormatter;
@@ -179,19 +179,19 @@ final class Page_Element {
 	public function __call( string $method, array $args = array() ): static
 	{
 		if ( ! in_array( $method, $this->known_elements ) ) {
-			throw new \BadMethodCallException( sprintf(
+			throw new \BadMethodCallException( esc_html( sprintf(
 				'Call to undefined method: %s::%s()',
 				__CLASS__, $method
-			) );
+			) ) );
 		}
 
 		$atts = $args[0] ?? $args['atts'] ?? array();
 
 		if ( ! is_array( $atts ) ) {
-			throw new \TypeError( sprintf(
+			throw new \TypeError( esc_html( sprintf(
 				'%s::%s(): Argument #1 ($atts) must be of type array, %s given',
 				__CLASS__, $method, gettype( $atts )
-			) );
+			) ) );
 		}
 
 		$this->formatter->append_start_tag( $method, $atts );
@@ -218,10 +218,10 @@ final class Page_Element {
 
 				$this->within_element = false;
 			} else {
-				throw new \TypeError( sprintf(
+				throw new \TypeError( esc_html( sprintf(
 					'%s::%s(): Argument #2 ($child) must be of type Closure|string, %s given',
 					__CLASS__, $method, gettype( $child )
-				) );
+				) ) );
 			}
 		}
 
@@ -252,7 +252,7 @@ final class Page_Element {
 		if ( ! in_array( $mode, array( 'br', 'div', 'span' ) ) ) {
 			throw new \InvalidArgumentException( sprintf(
 				'%s::clear(): Argument #1 ($mode) must be one of "br", "div", or "span", %s given',
-				__CLASS__, $mode
+				__CLASS__, esc_html( $mode )
 			) );
 		}
 
@@ -307,10 +307,15 @@ final class Page_Element {
 	 * @internal
 	 */
 	public function dump( mixed ...$params ): static {
-		$atts = array( 'class' => 'wpcf7em-debug' );
+		if ( ! CF7EM_DEBUG ) {
+			return $this; // No-op in production
+		}
+
+		$atts = array( 'class' => 'cf7em-debug' );
 
 		return $this->div( $atts, static fn ( $elm ) => $elm
 			->pre( child: static fn ( $elm ) => $elm
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_dump
 				->call( static fn () => var_dump( ...$params ) )
 			)
 		);

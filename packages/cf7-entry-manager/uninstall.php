@@ -4,7 +4,7 @@
  *
  * Uninstalling Entry Manager for Contact Form 7 deletes submissions and options.
  *
- * @package feryardiant/wpcf7-entry-manager
+ * @package feryardiant/cf7-entry-manager
  * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  */

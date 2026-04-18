@@ -1,11 +1,13 @@
 <?php
 /**
- * @package feryardiant/wpcf7-entry-manager
+ * @package feryardiant/cf7-entry-manager
  * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
  */
 
-namespace CF7_EntryManager;
+namespace CF7_Entry_Manager;
+
+defined( 'ABSPATH' ) || exit;
 
 use WPCF7_ContactForm;
 
@@ -21,7 +23,7 @@ use WPCF7_ContactForm;
 			$post_type_object->labels->items_list,
 			$post_type_object->labels->menu_name,
 			'wpcf7_read_contact_forms',
-			'wpcf7-entry-manager',
+			'cf7-entry-manager',
 			__NAMESPACE__ . '\admin_management_page',
 			2,
 		);
@@ -49,11 +51,11 @@ use WPCF7_ContactForm;
 
 		$form_data = $option->form_data();
 
-		\do_action( 'wpcf7em_before_save', $form_data );
+		\do_action( 'cf7em_before_save', $form_data );
 
 		$returned_id = Item::store( $contact_form, $option );
 
-		\do_action( 'wpcf7em_after_save', $form_data, $returned_id );
+		\do_action( 'cf7em_after_save', $form_data, $returned_id );
 	},
 	10, 1
 );
@@ -64,7 +66,7 @@ use WPCF7_ContactForm;
 \add_action(
 	'wpcf7_save_contact_form',
 	static function ( WPCF7_ContactForm $contact_form, array $data ): void {
-		$submissions = \wp_parse_args( $data['wpcf7-entry-manager'], array() );
+		$submissions = \wp_parse_args( $data['cf7-entry-manager'], array() );
 
 		$contact_form->set_properties( array( 'submissions' => $submissions ) );
 	},
@@ -108,7 +110,7 @@ use WPCF7_ContactForm;
 function admin_load_page(): void {
 	$action = \wpcf7_superglobal_request( 'action', null );
 
-	\do_action( 'wpcf7em_admin_page_load',
+	\do_action( 'cf7em_admin_page_load',
 		\wpcf7_superglobal_get( 'page' ),
 		$action
 	);
@@ -116,7 +118,7 @@ function admin_load_page(): void {
 	if ( 'read' === $action ) {
 		$id = (int) \wpcf7_superglobal_get( 'post' );
 
-		\check_admin_referer( 'wpcf7em-entry_' . $id );
+		\check_admin_referer( 'cf7em-entry_' . $id );
 
 		$query = array();
 
@@ -154,15 +156,15 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 
 	$elm->h2( array(), \esc_html( $post_type_object->label ) );
 
-	$elm->fieldset( array( 'class' => 'wpcf7em-option' ), static fn ( $elm ) => $elm
+	$elm->fieldset( array( 'class' => 'cf7em-option' ), static fn ( $elm ) => $elm
 		->legend( array(), \esc_html(
-			__( 'You can edit the way you treat each submissions here.', 'wpcf7-entry-manager' )
+			__( 'You can edit the way you treat each submissions here.', 'cf7-entry-manager' )
 		) )
 
 		->table( array( 'class' => 'form-table' ), static fn ( $elm ) => $elm
 			->tbody( child: static function ( $elm ) use ( $contact_form ) {
 				$option = new Option( $contact_form );
-				$panel_id = 'wpcf7-entry-manager';
+				$panel_id = 'cf7-entry-manager';
 
 				foreach ( $option->fields() as $id => $field ) {
 					$field = \wp_parse_args( $field, array(
@@ -219,7 +221,7 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 								'select' => $elm->select( $field_atts,
 									static function ( $elm ) use ( $field, $selected ) {
 										$elm->option( array( 'selected' => empty( $selected ), 'value' => '' ),
-											\esc_html( __( 'None selected', 'wpcf7-entry-manager' ) )
+											\esc_html( __( 'None selected', 'cf7-entry-manager' ) )
 										);
 
 										foreach ( $field['options'] as $value => $label ) {
@@ -265,6 +267,18 @@ function admin_management_page(): void {
 
 	if ( 'view' === $action && $item ) {
 		$item = new Item( $item );
+		$elm = new Page_Element( array(
+			'allowed_html' => array(
+				'form' => array(
+					'method' => true,
+					'action' => true,
+					'id' => true,
+					'class' => true,
+					'disabled' => true,
+				),
+			)
+		) );
+
 		$item->mark_read();
 
 		require_once __DIR__ . '/view-entry.php';
@@ -296,13 +310,13 @@ function admin_management_page(): void {
 			->input( array(
 				'type' => 'hidden',
 				'name' => 'page',
-				'value' => 'wpcf7-entry-manager',
+				'value' => 'cf7-entry-manager',
 			) )
 
 			->call( static function () use ( $list_table, $post_type_object ) {
 				$list_table->search_box(
 					$post_type_object->labels->search_items,
-					'wpcf7-entry-manager'
+					'cf7-entry-manager'
 				);
 
 				$list_table->display();
@@ -319,6 +333,6 @@ function admin_management_page(): void {
 function admin_menu_url( array $query ): string {
 	return \add_query_arg(
 		$query,
-		\menu_page_url( 'wpcf7-entry-manager', false )
+		\menu_page_url( 'cf7-entry-manager', false )
 	);
 }
