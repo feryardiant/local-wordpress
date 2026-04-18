@@ -33,7 +33,7 @@ $elm->div( array(
 	}, $item )
 
 	->h1( array( 'class' => 'wp-heading-inline' ),
-		esc_html( __( 'View Form Submission', 'cf7-entry-manager' ) )
+		esc_html__( 'View Form Submission', 'cf7-entry-manager' )
 	)
 
 	->hr( array( 'class' => 'wp-header-end' ) )
@@ -64,7 +64,7 @@ $elm->div( array(
 						static fn ( $elm ) => $elm
 						->header( array( 'class' => 'postbox-header' ),
 							static fn ( $elm ) => $elm
-							->h2( child: esc_html( __( 'Info', 'cf7-entry-manager' ) ) )
+							->h2( child: __( 'Info', 'cf7-entry-manager' ) )
 							->div( array( 'class' => 'handle-actions hide-if-no-js' ),
 								static fn ( $elm ) => $elm
 								// Nothing for now
@@ -143,7 +143,7 @@ $elm->div( array(
 						static fn ( $elm ) => $elm
 						->header( array( 'class' => 'postbox-header' ),
 							static fn ( $elm ) => $elm
-							->h2( child: esc_html( __( 'Submission Entry', 'cf7-entry-manager' ) ))
+							->h2( child: __( 'Submission Entry', 'cf7-entry-manager' ))
 							->div( array( 'class' => 'handle-actions hide-if-no-js' ),
 								static fn ( $elm ) => $elm
 									// Nothing for now
@@ -223,11 +223,11 @@ $elm->div( array(
 															array_unshift( $options, 'optional' );
 														}
 
-														$elm->p( child: esc_html( sprintf(
+														$elm->p( child: sprintf(
 															/* translators: %s: comma-separated list of form tag options */
-															__( 'Options: %s', 'cf7-entry-manager' ),
+															esc_html__( 'Options: %s', 'cf7-entry-manager' ),
 															implode( ', ', $options )
-														) ) );
+														) );
 													}
 												)
 											)

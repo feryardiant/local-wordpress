@@ -144,25 +144,25 @@ final class Option implements ArrayAccess {
 
 		return array(
 			'should_record' => array(
-				'label' => \esc_html( __( 'Record', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Whether to record the submissions to the database', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Record', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Whether to record the submissions to the database', 'cf7-entry-manager'
 				),
 				'atts' => array( 'type' => 'checkbox' ),
 			),
 			'subject_field' => array(
 				'label' => \esc_html( __( 'Subject', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Choose which field is identified as a submission subject', 'cf7-entry-manager' )
+				'description' => \esc_html__(
+				'Choose which field is identified as a submission subject', 'cf7-entry-manager'
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'message_field' => array(
-				'label' => \esc_html( __( 'Message', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Choose which field is identified as a submission message', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Message', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Choose which field is identified as a submission message', 'cf7-entry-manager'
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
@@ -170,34 +170,34 @@ final class Option implements ArrayAccess {
 			),
 			'sep-1' => array( 'type' => 'separator' ),
 			'store_author' => array(
-				'label' => \esc_html( __( 'Author', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Whether the submission author will be registered as subscriber', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Author', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Whether the submission author will be registered as subscriber', 'cf7-entry-manager'
 				),
 				'atts' => array( 'type' => 'checkbox' ),
 			),
 			'name_field' => array(
-				'label' => \esc_html( __( 'Author Name', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Choose which field is identified as the submitter\'s name', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Author Name', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Choose which field is identified as the submitter\'s name', 'cf7-entry-manager'
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'email_field' => array(
-				'label' => \esc_html( __( 'Author Email', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Choose which field is identified as the submitter\'s email', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Author Email', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Choose which field is identified as the submitter\'s email', 'cf7-entry-manager'
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),
 				'options' => $mail_tags,
 			),
 			'phone_field' => array(
-				'label' => \esc_html( __( 'Author Phone', 'cf7-entry-manager' ) ),
-				'description' => \esc_html(
-					__( 'Choose which field is identified as the submitter\'s phone number', 'cf7-entry-manager' )
+				'label' => \esc_html__( 'Author Phone', 'cf7-entry-manager' ),
+				'description' => \esc_html__(
+					'Choose which field is identified as the submitter\'s phone number', 'cf7-entry-manager'
 				),
 				'type' => 'select',
 				'atts' => array( 'class' => 'large-text code' ),

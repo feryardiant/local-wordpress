@@ -29,20 +29,20 @@ define( 'CF7EM__MINIMUM_PHP_VERSION', '8.1' );
  */
 if ( version_compare( PHP_VERSION, CF7EM__MINIMUM_PHP_VERSION, '<' ) ) {
 	if ( CF7EM_DEBUG ) {
-		error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			sprintf(
-				/* translators: Placeholders are numbers, versions of PHP in use on the site, and required by PHP. */
-				esc_html__( 'Your version of PHP (%1$s) is lower than the version required by Entry Manager for Contact Form 7 (%2$s). Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ),
-				PHP_VERSION,
-				CF7EM__MINIMUM_PHP_VERSION
-			)
-		);
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( sprintf(
+			/* translators: Placeholders are numbers, versions of PHP in use on the site, and required by Entry Manager for Contact Form 7 plugin. */
+			esc_html__( 'Your version of PHP (%1$s) is lower than the version required by Entry Manager for Contact Form 7 (%2$s). Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ),
+			PHP_VERSION, CF7EM__MINIMUM_PHP_VERSION
+		) );
 	}
 
 	add_action( 'admin_notices', static function () {
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php esc_html_e( 'Entry Manager for Contact Form 7 requires a more recent version of PHP and has been paused. Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ); ?></p>
+			<p><?php esc_html_e(
+				'Entry Manager for Contact Form 7 requires a more recent version of PHP and has been paused. Please update PHP to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager'
+				); ?></p>
 		</div>
 		<?php
 	} );
@@ -55,20 +55,20 @@ if ( version_compare( PHP_VERSION, CF7EM__MINIMUM_PHP_VERSION, '<' ) ) {
  */
 if ( version_compare( $GLOBALS['wp_version'], CF7EM__MINIMUM_WP_VERSION, '<' ) ) {
 	if ( CF7EM_DEBUG ) {
-		error_log( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			sprintf(
-				/* translators: Placeholders are numbers, versions of WordPress in use on the site, and required by WordPress. */
-				esc_html__( 'Your version of WordPress (%1$s) is lower than the version required by Entry Manager for Contact Form 7 (%2$s). Please update WordPress to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ),
-				$GLOBALS['wp_version'],
-				CF7EM__MINIMUM_WP_VERSION
-			)
-		);
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( sprintf(
+			/* translators: Placeholders are numbers, versions of WordPress in use on the site, and required by Entry Manager for Contact Form 7 plugin. */
+			esc_html__( 'Your version of WordPress (%1$s) is lower than the version required by Entry Manager for Contact Form 7 (%2$s). Please update WordPress to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ),
+			$GLOBALS['wp_version'], CF7EM__MINIMUM_WP_VERSION
+		) );
 	}
 
 	add_action( 'admin_notices', static function () {
 		?>
 		<div class="notice notice-error is-dismissible">
-			<p><?php esc_html_e( 'Entry Manager for Contact Form 7 requires a more recent version of WordPress and has been paused. Please update WordPress to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager' ); ?></p>
+			<p><?php esc_html_e(
+				'Entry Manager for Contact Form 7 requires a more recent version of WordPress and has been paused. Please update WordPress to continue enjoying Entry Manager for Contact Form 7.', 'cf7-entry-manager'
+				); ?></p>
 		</div>
 		<?php
 	} );
