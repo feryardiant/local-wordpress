@@ -215,23 +215,25 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 								$field_atts['checked'] = $option[$id];
 							}
 
-							$element->{$field['type']}( $field_atts, static function ( Page_Element $element ) use ( $field, $selected ) {
-								if ( $field['type'] !== 'select' || ! is_array( $field['options'] ?? null ) ) {
-									return;
-								}
+							match ( $field['type'] ) {
+								'select' => $element->select( $field_atts,
+									static function ( $element ) use ( $field, $selected ) {
+										$element->option( array( 'selected' => empty( $selected ), 'value' => '' ),
+											\esc_html( __( 'None selected', 'wpcf7-entry-manager' ) )
+										);
 
-								$element->option( array( 'selected' => is_null( $selected ), 'value' => '' ),
-									\esc_html( __( 'None selected', 'wpcf7-entry-manager' ) )
-								);
+										foreach ( $field['options'] as $value => $label ) {
+											$value = is_int( $value ) ? $label : $value;
 
-								foreach ( $field['options'] as $value => $label ) {
-									$value = is_int( $value ) ? $label : $value;
+											$element->option( array(
+												'value' => \esc_attr( $value ), 'selected' => $selected === $value
+											), \esc_html( $label ) );
+										}
+									}
+								),
 
-									$element->option( array( 'value' => \esc_attr( $value ), 'selected' => $selected === $value ),
-										\esc_html( $label )
-									);
-								}
-							} );
+								default => $element->input( $field_atts ),
+							};
 
 							if ( ! empty( $field['description'] ) ) {
 								if ( $is_checkbox ) {
