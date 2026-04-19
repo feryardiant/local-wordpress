@@ -2,9 +2,11 @@
   "name": "@feryardiant/local-wordpress",
   "type": "module",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "scripts": {
     "lint": "biome check",
     "lint:fix": "biome format --write",
