@@ -225,7 +225,7 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 							->th(
 								array( 'scope' => 'row' ),
 								static fn ( $elm ) => $elm
-									->label( array( 'for' => $field_id ), $field['label'] )
+									->label( array( 'for' => $field_id ), esc_html( $field['label'] ) )
 							)
 
 							->td(
@@ -263,7 +263,7 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 														'selected' => empty( $selected ),
 														'value'    => '',
 													),
-													\esc_html( \__( 'None selected', 'cf7-entry-manager' ) )
+													\__( 'None selected', 'cf7-entry-manager' )
 												);
 
 												foreach ( $field['options'] as $value => $label ) {

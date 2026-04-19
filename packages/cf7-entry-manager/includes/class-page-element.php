@@ -18,6 +18,7 @@ use WPCF7_HTMLFormatter;
  * This class provides a fluent interface for generating HTML elements using WPCF7_HTMLFormatter.
  *
  * // Grouping & Text
+ *
  * @method self div(array $atts = [], Closure(self)|string $child = null)
  * @method self p(array $atts = [], Closure(self)|string $child = null)
  * @method self span(array $atts = [], Closure(self)|string $child = null)
@@ -251,7 +252,7 @@ final class Page_Element {
 
 		if ( null !== $child ) {
 			if ( is_string( $child ) ) {
-				$this->formatter->append_preformatted( \esc_html( $child ) );
+				$this->formatter->append_preformatted( $child );
 			} elseif ( $child instanceof Closure ) {
 				$child_callback = new \ReflectionFunction( $child );
 
@@ -260,7 +261,7 @@ final class Page_Element {
 				$return = $child_callback->invoke( $this );
 
 				if ( is_string( $return ) ) {
-					$this->formatter->append_preformatted( \esc_html( $child ) );
+					$this->formatter->append_preformatted( $child );
 				}
 
 				$this->within_element = false;
