@@ -17,9 +17,11 @@
     },
     "packages/cf7-entry-manager": {
       "name": "@feryardiant/cf7-entry-manager",
+      "version": "0.1.0",
     },
     "packages/custom-theme": {
       "name": "@feryardiant/wp-custom-theme",
+      "version": "0.0.0",
     },
   },
   "overrides": {
