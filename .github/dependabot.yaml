@@ -10,3 +10,17 @@ updates:
     versioning-strategy: lockfile-only
     labels:
       - dependencies
+
+  - package-ecosystem: bun
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Asia/Jakarta
+    open-pull-requests-limit: 10
+    versioning-strategy: lockfile-only
+    ignore:
+      - dependency-name: '@types/bun'
+      - dependency-name: '@types/node'
+      - dependency-name: 'typescript'
+    labels:
+      - dependencies

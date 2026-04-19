@@ -1,0 +1,40 @@
+{
+  "name": "@feryardiant/local-wordpress",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "biome check",
+    "lint:fix": "biome format --write",
+    "postinstall": "if [ -z \"$CI\" ]; then simple-git-hooks; fi"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.12",
+    "@tsconfig/bun": "^1.0.10",
+    "@types/bun": "1.3.10",
+    "lint-staged": "^16.4.0",
+    "simple-git-hooks": "^2.13.1"
+  },
+  "overrides": {
+    "@types/node": "24.9.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bunx lint-staged --allow-empty"
+  },
+  "lint-staged": {
+    "*.{css,jsonc,ts}": [
+      "biome format --write --no-errors-on-unmatched"
+    ],
+    "*.php": [
+      "sh -c 'vendor/bin/phpcbf \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
+    ],
+    "{package,tsconfig}.json": [
+      "biome format --write --no-errors-on-unmatched"
+    ]
+  }
+}
