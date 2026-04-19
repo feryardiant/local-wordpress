@@ -1,28 +1,49 @@
 <?php
+/**
+ * Local custom theme
+ *
+ * @package feryardiant/wp-custom-theme
+ * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
+ */
 
-add_action( 'wp_enqueue_scripts', 'custom_theme_scripts' );
+add_action(
+	'wp_enqueue_scripts',
+	static function (): void {
+		$theme = wp_get_theme( get_stylesheet() );
 
-function custom_theme_scripts() {
-	$theme = wp_get_theme( get_stylesheet() );
+		wp_register_script(
+			$theme->stylesheet,
+			get_stylesheet_directory_uri() . '/custom.js',
+			array(),
+			$theme->version,
+			array( 'strategy' => 'defer' )
+		);
 
-	wp_register_script( $theme->stylesheet, get_stylesheet_directory_uri() . '/custom.js', [], $theme->version, ['defer'] );
-
-	wp_enqueue_script( $theme->stylesheet );
-}
-
-add_action( 'switch_theme', 'custom_theme_deactivation', 10, 0 );
-add_action( 'after_switch_theme', 'custom_theme_activation', 10, 0 );
+		wp_enqueue_script( $theme->stylesheet );
+	}
+);
 
 /**
  * Trigger custom theme activation hook.
  */
-function custom_theme_activation() {
-	do_action( 'ct_activation' );
-}
+add_action(
+	'after_switch_theme',
+	static function (): void {
+		do_action( 'ct_activation' );
+	},
+	10,
+	0
+);
 
 /**
  * Trigger custom theme deactivation hook.
  */
-function custom_theme_deactivation() {
-	do_action( 'ct_deactivation' );
-}
+add_action(
+	'switch_theme',
+	static function (): void {
+		do_action( 'ct_deactivation' );
+	},
+	10,
+	0
+);

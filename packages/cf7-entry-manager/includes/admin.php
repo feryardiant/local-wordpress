@@ -1,5 +1,7 @@
 <?php
 /**
+ * Admin functions.
+ *
  * @package feryardiant/cf7-entry-manager
  * @copyright Copyright (c) 2026 Fery Wardiyanto <https://feryardiant.id>
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License, version 3 or higher
@@ -19,7 +21,8 @@ use WPCF7_ContactForm;
 	static function (): void {
 		$post_type_object = \get_post_type_object( 'form-submissions' );
 
-		$submissions = \add_submenu_page( 'wpcf7',
+		$submissions = \add_submenu_page(
+			'wpcf7',
 			$post_type_object->labels->items_list,
 			$post_type_object->labels->menu_name,
 			'wpcf7_read_contact_forms',
@@ -31,10 +34,12 @@ use WPCF7_ContactForm;
 		\add_action(
 			'load-' . $submissions,
 			__NAMESPACE__ . '\admin_load_page',
-			10, 0
+			10,
+			0
 		);
 	},
-	9, 0
+	9,
+	0
 );
 
 /**
@@ -57,7 +62,8 @@ use WPCF7_ContactForm;
 
 		\do_action( 'cf7em_after_save', $form_data, $returned_id );
 	},
-	10, 1
+	10,
+	1
 );
 
 /**
@@ -70,7 +76,8 @@ use WPCF7_ContactForm;
 
 		$contact_form->set_properties( array( 'submissions' => $submissions ) );
 	},
-	10, 2
+	10,
+	2
 );
 
 /**
@@ -79,9 +86,11 @@ use WPCF7_ContactForm;
 \add_filter(
 	'wpcf7_pre_construct_contact_form_properties',
 	static fn ( array $properties ) => array_merge(
-		$properties, array( 'submissions' => array() )
+		$properties,
+		array( 'submissions' => array() )
 	),
-	10, 1
+	10,
+	1
 );
 
 /**
@@ -93,13 +102,14 @@ use WPCF7_ContactForm;
 		$post_type_object = \get_post_type_object( 'form-submissions' );
 
 		$panels['submissions'] = array(
-			'title' => $post_type_object->label,
+			'title'    => $post_type_object->label,
 			'callback' => __NAMESPACE__ . '\admin_editor_panel',
 		);
 
 		return $panels;
 	},
-	10, 1
+	10,
+	1
 );
 
 /**
@@ -110,7 +120,8 @@ use WPCF7_ContactForm;
 function admin_load_page(): void {
 	$action = \wpcf7_superglobal_request( 'action', null );
 
-	\do_action( 'cf7em_admin_page_load',
+	\do_action(
+		'cf7em_admin_page_load',
 		\wpcf7_superglobal_get( 'page' ),
 		$action
 	);
@@ -123,7 +134,7 @@ function admin_load_page(): void {
 		$query = array();
 
 		if ( Item::set_read_status( $id, true ) ) {
-			$query['post'] = $id;
+			$query['post']    = $id;
 			$query['message'] = 'marked-read';
 		}
 
@@ -137,119 +148,155 @@ function admin_load_page(): void {
 	\add_filter(
 		'manage_' . $screen->id . '_columns',
 		array( List_Table::class, 'define_column' ),
-		10, 1
+		10,
+		1
 	);
 }
 
 /**
  * Render the submissions panel for the contact form editor.
  *
+ * @param WPCF7_ContactForm $contact_form The contact form.
  * @internal
  */
 function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
 	$post_type_object = \get_post_type_object( 'form-submissions' );
-	$elm = new Page_Element( array(
-		'allowed_html' => array(
-			'form' => array( 'method' => true ),
-		),
-	) );
+
+	$elm = new Page_Element(
+		array(
+			'allowed_html' => array(
+				'form' => array( 'method' => true ),
+			),
+		)
+	);
 
 	$elm->h2( array(), \esc_html( $post_type_object->label ) );
 
-	$elm->fieldset( array( 'class' => 'cf7em-option' ), static fn ( $elm ) => $elm
-		->legend( array(), \esc_html(
-			__( 'You can edit the way you treat each submissions here.', 'cf7-entry-manager' )
-		) )
+	$elm->fieldset(
+		array( 'class' => 'cf7em-option' ),
+		static fn ( $elm ) => $elm
+		->legend(
+			array(),
+			\__(
+				'You can edit the way you treat each submissions here.',
+				'cf7-entry-manager'
+			)
+		)
 
-		->table( array( 'class' => 'form-table' ), static fn ( $elm ) => $elm
-			->tbody( child: static function ( $elm ) use ( $contact_form ) {
-				$option = new Option( $contact_form );
-				$panel_id = 'cf7-entry-manager';
+		->table(
+			array( 'class' => 'form-table' ),
+			static fn ( $elm ) => $elm
+			->tbody(
+				child: static function ( $elm ) use ( $contact_form ) {
+					$option   = new Option( $contact_form );
+					$panel_id = 'cf7-entry-manager';
 
-				foreach ( $option->fields() as $id => $field ) {
-					$field = \wp_parse_args( $field, array(
-						'label' => '',
-						'description' => '',
-						'type' => 'input',
-						'atts' => array(),
-						'options' => array(),
-					) );
-
-					if ( $field['type'] === 'separator' ) {
-						$elm->tr( child: static fn ( $elm ) => $elm
-							->td( array( 'colspan' => '2', 'style' => 'padding: 0;' ),
-								static fn ( $elm ) => $elm->hr()
+					foreach ( $option->fields() as $id => $field ) {
+						$field = \wp_parse_args(
+							$field,
+							array(
+								'label'       => '',
+								'description' => '',
+								'type'        => 'input',
+								'atts'        => array(),
+								'options'     => array(),
 							)
 						);
 
-						continue;
-					}
+						if ( 'separator' === $field['type'] ) {
+							$elm->tr(
+								child: static fn ( $elm ) => $elm
+								->td(
+									array(
+										'colspan' => '2',
+										'style'   => 'padding: 0;',
+									),
+									static fn ( $elm ) => $elm->hr()
+								)
+							);
 
-					$field_id = sprintf( '%s-%s', $panel_id, $id );
+							continue;
+						}
 
-					$elm->tr( child: static fn ( $elm ) => $elm
-						->th( array( 'scope' => 'row' ),
-							static fn ( $elm ) => $elm
-								->label( array( 'for' => $field_id ), $field['label'] )
-						)
+						$field_id = sprintf( '%s-%s', $panel_id, $id );
 
-						->td( child: static function ( $elm ) use ( $option, $id, $panel_id, $field, $field_id ) {
-							$field_atts = \wp_parse_args( $field['atts'], array(
-								'id' => $field_id,
-								'name' => sprintf( '%s[%s]', $panel_id, $id ),
-								'value' => $option[$id],
-							) );
+						$elm->tr(
+							child: static fn ( $elm ) => $elm
+							->th(
+								array( 'scope' => 'row' ),
+								static fn ( $elm ) => $elm
+									->label( array( 'for' => $field_id ), $field['label'] )
+							)
 
-							$is_select = $field['type'] === 'select';
-							$is_checkbox = $field['type'] === 'input' && $field_atts['type'] === 'checkbox';
+							->td(
+								child: static function ( $elm ) use ( $option, $id, $panel_id, $field, $field_id ) {
+									$field_atts = \wp_parse_args(
+										$field['atts'],
+										array(
+											'id'    => $field_id,
+											'name'  => sprintf( '%s[%s]', $panel_id, $id ),
+											'value' => $option[ $id ],
+										)
+									);
 
-							$selected = null;
+									$is_select   = 'select' === $field['type'];
+									$is_checkbox = 'input' === $field['type'] && 'checkbox' === $field_atts['type'];
 
-							if ( $is_select ) {
-								$selected = $field_atts['value'];
-								unset( $field_atts['value'] );
-							}
+									$selected = null;
 
-							if ( $is_checkbox ) {
-								$elm->label( array( 'for' => $field_id ) );
-
-								$field_atts['value'] = 'on';
-								$field_atts['checked'] = $option[$id];
-							}
-
-							match ( $field['type'] ) {
-								'select' => $elm->select( $field_atts,
-									static function ( $elm ) use ( $field, $selected ) {
-										$elm->option( array( 'selected' => empty( $selected ), 'value' => '' ),
-											\esc_html( __( 'None selected', 'cf7-entry-manager' ) )
-										);
-
-										foreach ( $field['options'] as $value => $label ) {
-											$value = is_int( $value ) ? $label : $value;
-
-											$elm->option( array(
-												'value' => \esc_attr( $value ), 'selected' => $selected === $value
-											), \esc_html( $label ) );
-										}
+									if ( $is_select ) {
+										$selected = $field_atts['value'];
+										unset( $field_atts['value'] );
 									}
-								),
 
-								default => $elm->input( $field_atts ),
-							};
+									if ( $is_checkbox ) {
+										$field_atts['value']   = 'on';
+										$field_atts['checked'] = $option[ $id ];
+									}
 
-							if ( empty( $field['description'] ) ) {
-								return;
-							}
+									match ( $field['type'] ) {
+										'select' => $elm->select(
+											$field_atts,
+											static function ( $elm ) use ( $field, $selected ) {
+												$elm->option(
+													array(
+														'selected' => empty( $selected ),
+														'value'    => '',
+													),
+													\esc_html( \__( 'None selected', 'cf7-entry-manager' ) )
+												);
 
-							if ( $is_checkbox ) {
-								$elm->span( array(), esc_html( $field['description'] ) );
-							} else {
-								$elm->p( array( 'class' => 'description' ), esc_html( $field['description'] ) );
-							}
-						} )
-					);
+												foreach ( $field['options'] as $value => $label ) {
+													$value = is_int( $value ) ? $label : $value;
+
+													$elm->option(
+														array(
+															'value' => \esc_attr( $value ),
+															'selected' => $selected === $value,
+														), \esc_html( $label )
+													);
+												}
+											}
+										),
+
+										default => $elm->input( $field_atts ),
+									};
+
+									if ( empty( $field['description'] ) ) {
+										return;
+									}
+
+									if ( $is_checkbox ) {
+										$elm->span( array(), \esc_html( $field['description'] ) );
+									} else {
+										$elm->p( array( 'class' => 'description' ), \esc_html( $field['description'] ) );
+									}
+								}
+							)
+						);
+					}
 				}
-			} )
+			)
 		)
 	);
 
@@ -263,21 +310,23 @@ function admin_editor_panel( WPCF7_ContactForm $contact_form ): void {
  */
 function admin_management_page(): void {
 	$action = \wpcf7_superglobal_request( 'action', null );
-	$item = \wpcf7_superglobal_request( 'post', null );
+	$item   = \wpcf7_superglobal_request( 'post', null );
 
 	if ( 'view' === $action && $item ) {
 		$item = new Item( $item );
-		$elm = new Page_Element( array(
-			'allowed_html' => array(
-				'form' => array(
-					'method' => true,
-					'action' => true,
-					'id' => true,
-					'class' => true,
-					'disabled' => true,
+		$elm  = new Page_Element(
+			array(
+				'allowed_html' => array(
+					'form' => array(
+						'method'   => true,
+						'action'   => true,
+						'id'       => true,
+						'class'    => true,
+						'disabled' => true,
+					),
 				),
 			)
-		) );
+		);
 
 		$item->mark_read();
 
@@ -286,41 +335,50 @@ function admin_management_page(): void {
 		return;
 	}
 
-	$list_table = new List_Table();
+	$list_table       = new List_Table();
 	$post_type_object = \get_post_type_object( 'form-submissions' );
 
 	$list_table->prepare_items();
 
-	$elm = new Page_Element( array(
-		'allowed_html' => array(
-			'form' => array( 'method' => true ),
-		),
-	) );
+	$elm = new Page_Element(
+		array(
+			'allowed_html' => array(
+				'form' => array( 'method' => true ),
+			),
+		)
+	);
 
-	$elm->div( array( 'class' => 'wrap' ),
+	$elm->div(
+		array( 'class' => 'wrap' ),
 		static fn ( $elm ) => $elm
-		->h1( array( 'class' => 'wp-heading-inline' ),
+		->h1(
+			array( 'class' => 'wp-heading-inline' ),
 			\esc_html( $post_type_object->labels->items_list )
 		)
 
 		->hr( array( 'class' => 'wp-header-end' ) )
 
-		->form( array( 'method' => 'get' ),
+		->form(
+			array( 'method' => 'get' ),
 			static fn ( $elm ) => $elm
-			->input( array(
-				'type' => 'hidden',
-				'name' => 'page',
-				'value' => 'cf7-entry-manager',
-			) )
+			->input(
+				array(
+					'type'  => 'hidden',
+					'name'  => 'page',
+					'value' => 'cf7-entry-manager',
+				)
+			)
 
-			->call( static function () use ( $list_table, $post_type_object ) {
-				$list_table->search_box(
-					$post_type_object->labels->search_items,
-					'cf7-entry-manager'
-				);
+			->call(
+				static function () use ( $list_table, $post_type_object ) {
+					$list_table->search_box(
+						$post_type_object->labels->search_items,
+						'cf7-entry-manager'
+					);
 
-				$list_table->display();
-			} )
+					$list_table->display();
+				}
+			)
 		)
 	);
 
@@ -329,6 +387,8 @@ function admin_management_page(): void {
 
 /**
  * Generate the admin URL for the submissions page.
+ *
+ * @param array $query The query arguments to add to the URL.
  */
 function admin_menu_url( array $query ): string {
 	return \add_query_arg(

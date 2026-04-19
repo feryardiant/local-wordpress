@@ -10,13 +10,13 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 
-[*.{js,ts,yaml,yml,json,scss,toml}]
+[*.{js,ts,yaml,yml,scss,toml}]
 indent_size = 2
 
 [.*rc]
 indent_size = 2
 
-[packages/**.php]
+[packages/**.{css,php}]
 indent_style = tab
 
 [tests/**.php]
