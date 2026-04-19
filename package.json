@@ -31,7 +31,7 @@
       "biome format --write --no-errors-on-unmatched"
     ],
     "*.php": [
-      "vendor/bin/phpcbf"
+      "sh -c 'vendor/bin/phpcbf \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
     ],
     "{package,tsconfig}.json": [
       "biome format --write --no-errors-on-unmatched"
