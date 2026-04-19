@@ -26,6 +26,6 @@
         "optimize-autoloader": true,
         "allow-plugins": {}
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "beta",
     "prefer-stable": true
 }
