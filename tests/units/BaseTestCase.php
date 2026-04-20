@@ -39,7 +39,7 @@ abstract class BaseTestCase extends PHPUnitTestCase {
 		parent::tearDown();
 	}
 
-	protected function package_file( string $file_path ): string {
+	protected static function package_file( string $file_path ): string {
 		return dirname( ABSPATH, 3 ) . '/packages/' . $file_path;
 	}
 }

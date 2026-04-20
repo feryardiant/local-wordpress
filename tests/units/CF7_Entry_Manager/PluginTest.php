@@ -43,7 +43,7 @@ class PluginTest extends BaseTestCase {
 			);
 
 		// Load the plugin file
-		require_once $this->package_file( 'cf7-entry-manager/cf7-entry-manager.php' );
+		require static::package_file( 'cf7-entry-manager/cf7-entry-manager.php' );
 
 		// Verify constants
 		$this->assertTrue( defined( 'CF7EM_VERSION' ) );
