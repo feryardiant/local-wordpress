@@ -4,9 +4,9 @@ set -euo pipefail
 
 e_start() {
     if [[ -n "${CI:-}" ]]; then
-        echo '::group::'"$@"
+        echo "::group::$*"
     else
-        echo -e "> \e[1;33m$@\e[0m"
+        echo -e "> \e[1;33m$*\e[0m"
     fi
 }
 
@@ -75,17 +75,17 @@ e_end
 if _wp plugin is-active woocommerce; then
     e_start "Initializing default WooCommerce Settings..."
 
-    _wp option update woocommerce_store_address "${WC_STORE_ADDRESS}"
-    _wp option update woocommerce_store_city "${WC_STORE_CITY}"
-    _wp option update woocommerce_default_country "${WC_DEFAULT_COUNTRY}"
-    _wp option update woocommerce_currency "${WC_CURRENCY}"
-    _wp option update woocommerce_store_postcode "${WC_STORE_POSTCODE}"
+    _wp option update woocommerce_store_address "${WC_STORE_ADDRESS:-'Jl. Example No. 123'}"
+    _wp option update woocommerce_store_city "${WC_STORE_CITY:-'Batang'}"
+    _wp option update woocommerce_default_country "${WC_DEFAULT_COUNTRY:-'ID:JT'}"
+    _wp option update woocommerce_currency "${WC_CURRENCY:-'IDR'}"
+    _wp option update woocommerce_store_postcode "${WC_STORE_POSTCODE:-'12345'}"
 
     _wp option update woocommerce_weight_unit "${WC_WEIGHT_UNIT:-kg}"
     _wp option update woocommerce_dimension_unit "${WC_DIMENSION_UNIT:-cm}"
     _wp option update woocommerce_price_thousand_sep "${WC_PRICE_THOUSAND_SEP:-.}"
     _wp option update woocommerce_price_decimal_sep "${WC_PRICE_DECIMAL_SEP:-,}"
-    _wp option update woocommerce_price_num_decimals "${WC_PRICE_DECIMAL_NUM:-,}"
+    _wp option update woocommerce_price_num_decimals "${WC_PRICE_DECIMAL_NUM:-0}"
 
     # Skip the onboarding profile
     _wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json
