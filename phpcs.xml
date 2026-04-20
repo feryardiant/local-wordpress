@@ -21,12 +21,15 @@
 
 	<!-- Check all files in this directory and the directories below it. -->
     <file>packages/</file>
+    <file>tests/</file>
 
-    <exclude-pattern>*/.git/*</exclude-pattern>
+    <exclude-pattern>*/\.git/*</exclude-pattern>
+    <exclude-pattern>*/\.cache/*</exclude-pattern>
+	<exclude-pattern>*\.old/*</exclude-pattern>
 	<exclude-pattern>*/assets/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
-	<exclude-pattern>*\.old/*</exclude-pattern>
+    <exclude-pattern>*/wordpress/*</exclude-pattern>
 
     <rule ref="WordPress">
         <!-- Allows: Variable assignment in condition, e.g. `if ( $var = some_func() ) { ... }` -->

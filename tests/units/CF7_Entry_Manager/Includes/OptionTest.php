@@ -3,7 +3,6 @@
 namespace UnitTests\CF7_Entry_Manager\Includes;
 
 use CF7_Entry_Manager\Option;
-use Mockery;
 use UnitTests\CF7_Entry_Manager\TestCase;
 
 /**

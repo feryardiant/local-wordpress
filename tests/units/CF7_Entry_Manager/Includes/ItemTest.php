@@ -2,9 +2,7 @@
 
 namespace UnitTests\CF7_Entry_Manager\Includes;
 
-use Brain\Monkey\Functions;
 use CF7_Entry_Manager\Item;
-use Mockery;
 use UnitTests\CF7_Entry_Manager\TestCase;
 
 /**
