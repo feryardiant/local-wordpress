@@ -28,11 +28,6 @@ abstract class BaseTestCase extends PHPUnitTestCase {
 		// Load the test functions.
 		// require_once $_tests_dir . '/includes/functions.php';
 
-		define( 'WP_TESTS_DOMAIN', '' );
-		define( 'WP_TESTS_EMAIL', '' );
-		define( 'WP_TESTS_TITLE', '' );
-		define( 'WP_PHP_BINARY', '' );
-
 		// 'WP_TESTS_SKIP_INSTALL';
 
 		// Start up the WP testing environment.

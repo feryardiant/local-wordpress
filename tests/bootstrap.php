@@ -18,4 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	);
 }
 
+
+defined( 'WP_TESTS_DOMAIN' ) || define( 'WP_TESTS_DOMAIN', '' );
+defined( 'WP_TESTS_EMAIL' ) || define( 'WP_TESTS_EMAIL', '' );
+defined( 'WP_TESTS_TITLE' ) || define( 'WP_TESTS_TITLE', '' );
+defined( 'WP_PHP_BINARY' ) || define( 'WP_PHP_BINARY', '' );
+
+
 // Any other test initialization can go here.
