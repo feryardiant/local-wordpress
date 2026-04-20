@@ -87,20 +87,31 @@ jobs:
           SITE_ADMIN_EMAIL: admin@localhost
           SITE_TIMEZONE: UTC
         run: |
+          echo '::group::Download Core'
           vendor/bin/wp core download --version=${{ matrix.wp }}
+          echo '::endgroup::'
+
+          echo '::group::Install Core'
           vendor/bin/wp core install \
             --url="${SITE_URL}" --title="${SITE_TITLE}" \
             --admin_user="${SITE_ADMIN_USER}" \
             --admin_password="${SITE_ADMIN_PASS}" \
             --admin_email="${SITE_ADMIN_EMAIL}" \
             --skip-email --allow-root
+          echo '::endgroup::'
 
+          echo '::group::Set options'
           vendor/bin/wp option update permalink_structure "/%postname%/"
           vendor/bin/wp option update timezone_string "${SITE_TIMEZONE}"
+          echo '::endgroup::'
 
+          echo '::group::Install plugins'
           vendor/bin/wp plugin install contact-form-7
+          echo '::endgroup::'
 
+          echo '::group::Verify'
           ls -lah tests/stubs/wordpress
+          echo '::endgroup::'
 
       # - name: Lint
       #   run: |
