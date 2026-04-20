@@ -26,8 +26,26 @@ _wp() {
     fi
 }
 
+declare -A wpcf7_map
+
+wpcf7_map['5.9']='5.6'
+wpcf7_map['6.0']='5.7'
+wpcf7_map['6.1']='5.7'
+wpcf7_map['6.2']='5.8'
+wpcf7_map['6.3']='5.9'
+wpcf7_map['6.4']='5.9'
+wpcf7_map['6.5']='5.9'
+wpcf7_map['6.6']='6.0'
+wpcf7_map['6.7']='6.1'
+wpcf7_map['6.8']='6.1'
+wpcf7_map['6.9']='6.1'
+wpcf7_map['7.0']='6.1'
+
+WP_VERSION=${WP_VERSION:-'5.9'}
+CF7_VERSION=${wpcf7_map[${WP_VERSION}]}
+
 e_start 'Download Core'
-_wp core download --version=${WP_VERSION:-5.9}
+_wp core download --version=${WP_VERSION}
 e_end
 
 e_start 'Configure Core'
@@ -38,10 +56,10 @@ e_end
 
 e_start 'Install Core'
 _wp core install \
-  --url="${SITE_URL:-'http://localhost'}" --title="${SITE_TITLE:-'WordPress Local'}" \
-  --admin_user="${SITE_ADMIN_USER:-admin}" \
-  --admin_password="${SITE_ADMIN_PASS:-secret}" \
-  --admin_email="${SITE_ADMIN_EMAIL:-'admin@example.com'}" \
+  --url=${SITE_URL:-'http://localhost'} --title=${SITE_TITLE:-'WordPress Local'} \
+  --admin_user=${SITE_ADMIN_USER:-admin} \
+  --admin_password=${SITE_ADMIN_PASS:-secret} \
+  --admin_email=${SITE_ADMIN_EMAIL:-'admin@example.com'} \
   --skip-email --allow-root
 e_end
 
@@ -51,7 +69,7 @@ _wp option update timezone_string "${SITE_TIMEZONE:-Asia/Jakarta}"
 e_end
 
 e_start 'Install plugins'
-_wp plugin install contact-form-7 --version=${CF7_VERSION:-'5.6.4'}
+_wp plugin install contact-form-7 --version=${CF7_VERSION}
 e_end
 
 if _wp plugin is-active woocommerce; then

@@ -80,16 +80,8 @@ jobs:
       - name: Set up WordPress
         env:
           DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
-          SITE_URL: http://localhost
-          SITE_TITLE: WordPress Local
-          SITE_ADMIN_USER: admin
-          SITE_ADMIN_PASS: secret
-          SITE_ADMIN_EMAIL: admin@example.com
-          SITE_TIMEZONE: Asia/Jakarta
-
           MULTISITE_ENABLED: 0
           WP_VERSION: ${{ matrix.wp }}
-          CF7_VERSION: 5.6.4
         run: |
           bash scripts/init-wp.sh
 
