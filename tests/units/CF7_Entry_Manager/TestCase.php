@@ -2,6 +2,7 @@
 
 namespace UnitTests\CF7_Entry_Manager;
 
+use Brain\Monkey\Functions;
 use UnitTests\BaseTestCase;
 
 /**
@@ -33,5 +34,11 @@ abstract class TestCase extends BaseTestCase {
 			}'
 			);
 		}
+	}
+
+	public function setUp(): void {
+		parent::setUp();
+
+		Functions\when( 'wpcf7_kses_allowed_html' )->justReturn( array() );
 	}
 }
