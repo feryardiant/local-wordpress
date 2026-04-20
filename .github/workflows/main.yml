@@ -19,7 +19,7 @@ jobs:
       contents: read
 
   run:
-    name: on WordPress ${{ matrix.wp }}
+    name: with WP ${{ matrix.wp }} on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: [prepare]
 
@@ -70,7 +70,7 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v5
         with:
-          path: ${{ needs.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache-dir }}
           key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
