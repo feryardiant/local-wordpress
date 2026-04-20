@@ -1,10 +1,4 @@
-# Licensing Manifest
-
-This repository uses a multi-license structure to balance developer flexibility with ecosystem compliance.
-
-## 🛠 Development Environment (MIT)
-
-The root environment, Docker configurations, and maintenance scripts are licensed under the MIT License.
+MIT License
 
 Copyright (c) 2026 Fery Wardiyanto
 
@@ -25,10 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## 📦 WordPress Packages (GPL-3.0-or-later)
-
-All plugins and themes located in the `packages/` directory are licensed under the GNU General Public License, version 3 or later.
-
-- **License Link:** [GNU GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html)
-- **Rationale:** This ensures compliance with WordPress.org guidelines and provides modern patent protections for these distributable assets.
