@@ -6,13 +6,15 @@ e_start() {
     if [[ -n "${CI:-}" ]]; then
         echo '::group::'"$@"
     else
-        echo -e "> \e[1;33m$@"
+        echo -e "> \e[1;33m$@\e[0m"
     fi
 }
 
 e_end() {
     if [[ -n "${CI:-}" ]]; then
         echo '::endgroup::'
+    else
+        echo ''
     fi
 }
 
@@ -49,7 +51,7 @@ _wp option update timezone_string "${SITE_TIMEZONE:-Asia/Jakarta}"
 e_end
 
 e_start 'Install plugins'
-_wp plugin install contact-form-7 --version=${CF7_VERSION:-latest}
+_wp plugin install contact-form-7 --version=${CF7_VERSION:-'5.6.4'}
 e_end
 
 if _wp plugin is-active woocommerce; then
@@ -75,7 +77,7 @@ if _wp plugin is-active woocommerce; then
     e_end
 fi
 
-if [[ ${MULTISITE_ENABLED} -eq 1 ]]; then
+if [[ ${MULTISITE_ENABLED:-0} -eq 1 ]]; then
     e_start "Initializing multisite..."
 
     # https://developer.wordpress.org/advanced-administration/server/web-server/httpd/#multisite
