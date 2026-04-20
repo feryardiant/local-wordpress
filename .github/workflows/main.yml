@@ -84,8 +84,8 @@ jobs:
           SITE_TITLE: WordPress Local
           SITE_ADMIN_USER: admin
           SITE_ADMIN_PASS: secret
-          SITE_ADMIN_EMAIL: admin@localhost
-          SITE_TIMEZONE: UTC
+          SITE_ADMIN_EMAIL: admin@example.com
+          SITE_TIMEZONE: Asia/Jakarta
         run: |
           echo '::group::Download Core'
           vendor/bin/wp core download --version=${{ matrix.wp }}
