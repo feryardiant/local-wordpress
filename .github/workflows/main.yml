@@ -78,13 +78,6 @@ jobs:
         run: |
           composer update
 
-      - name: Install WordPress Core
-        env:
-          WP_ENV: testing
-          WP_HOME: http://localhost:8080
-          DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
-        run: .github/setup.sh
-
       - name: Lint
         run: |
           vendor/bin/phpcs
