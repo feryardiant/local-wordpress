@@ -16,5 +16,9 @@ for pkg_dir in packages/*/; do
 
     rm public/dist/$pkg.*.zip
 
+    cp LICENSE-GPL "$pkg_dir/license.txt"
+
     ./vendor/bin/wp dist-archive "$pkg_dir" public/dist --force --create-target-dir
+
+    rm "$pkg_dir/license.txt"
 done
