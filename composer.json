@@ -30,7 +30,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
         "mockery/mockery": "^1.6",
         "phpcompatibility/phpcompatibility-wp": "^2.1",
-        "phpunit/phpunit": "^12.5",
+        "phpunit/phpunit": "^10.5",
         "squizlabs/php_codesniffer": "^3.13",
         "wikimedia/composer-merge-plugin": "^2.1",
         "wp-cli/config-command": "^2.4",
