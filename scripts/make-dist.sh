@@ -1,11 +1,11 @@
 #!/bin/bash
 
-for pkg in `ls packages/`; do
-    if [ ! -d "packages/$pkg" ]; then
-        continue
-    fi
+set -euo pipefail
+shopt -s nullglob
 
-    pkg_dir="packages/$pkg"
+for pkg_dir in packages/*/; do
+    pkg_dir="${pkg_dir%/}"
+    pkg="${pkg_dir##*/}"
 
     if [ ! -f "$pkg_dir/.distignore" ]; then
         echo -e "\e[1;33mNotice:\e[0m No .distignore found for $pkg, skipping"
