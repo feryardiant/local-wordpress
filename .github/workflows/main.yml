@@ -76,7 +76,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer install
+          composer update
 
       - name: Install WordPress Core
         env:
