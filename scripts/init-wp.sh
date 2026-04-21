@@ -8,18 +8,18 @@ declare -A plugins_map
 
                   #                 Plugin  Woo     Blocksy
                   # CF7     JetPack Check   Comm.   Comp.
-plugins_map['5.9']='5.6.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.0']='5.7.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.1']='5.7.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.2']='5.8.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.3']='5.9.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.4']='5.9.0	15.7.1	1.9.0	10.6.2	2.0.0'
-plugins_map['6.5']='5.9.0	15.7.1	1.9.0	10.6.2	2.1.38'
-plugins_map['6.6']='6.0.0	15.7.1	1.9.0	10.6.2	2.1.38'
-plugins_map['6.7']='6.1.0	15.7.1	1.9.0	10.6.2	2.1.38'
+plugins_map['5.9']='5.6.4	13.6.1	none	8.1.4	2.1.38'
+plugins_map['6.0']='5.7.7	13.6.1	none	8.4.0	2.1.38'
+plugins_map['6.1']='5.7.7	13.6.1	none	8.4.0	2.1.38'
+plugins_map['6.2']='5.8.7	13.6.1	1.0.0	8.4.0	2.1.38'
+plugins_map['6.3']='5.9.1	13.6.1	1.0.0	9.2.3	2.1.38'
+plugins_map['6.4']='5.9.1	13.6.1	1.9.0	9.2.3	2.1.38'
+plugins_map['6.5']='5.9.1	14.0.0	1.9.0	10.0.3	2.1.38'
+plugins_map['6.6']='6.0.0	14.5.0	1.9.0	10.0.3	2.1.38'
+plugins_map['6.7']='6.1.0	15.4.0	1.9.0	10.6.2	2.1.38'
 plugins_map['6.8']='6.1.0	15.7.1	1.9.0	10.6.2	2.1.38'
-plugins_map['6.9']='6.1.5	15.7.1	1.9.0	10.6.2	2.1.38'
-plugins_map['7.0']='6.1.5	15.7.1	1.9.0	10.6.2	2.1.38'
+plugins_map['6.9']='6.2.0	15.7.1	1.9.0	10.6.2	2.1.38'
+plugins_map['7.0']='6.2.0	15.7.1	1.9.0	10.6.2	2.1.38'
 
 if [[ -f "$PWD/.env" ]]; then
     . "$PWD/.env"
@@ -33,7 +33,7 @@ wp_plugins=(${plugins_map[${wp_version_key}]//\t/ })
 declare -A plugin_supports
 
 # ContactForm7
-plugin_supports['contact-form-7']="${wp_plugins[0]:-6.1.5}"
+plugin_supports['contact-form-7']="${wp_plugins[0]:-6.2.0}"
 # JetPack
 plugin_supports['jetpack']="${wp_plugins[1]:-15.7.1}"
 # PluginCheck
@@ -41,7 +41,7 @@ plugin_supports['plugin-check']="${wp_plugins[2]:-1.9.0}"
 # WooCommerce
 plugin_supports['woocommerce']="${wp_plugins[3]:-10.6.2}"
 # BlocksyCompanion
-plugin_supports['blocksy-compnaion']="${wp_plugins[4]:-2.1.38}"
+plugin_supports['blocksy-companion']="${wp_plugins[4]:-2.1.38}"
 
 ASSET_DIR=${ASSET_DIR:-"$PWD/assets"}
 INSTALL_DIR=${INSTALL_DIR:-"$PWD/docker/volumes/wordpress"}
