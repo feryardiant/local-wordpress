@@ -16,8 +16,8 @@ e_end() {
 
 _wp() {
     if command -v wp > /dev/null 2>&1; then
-        wp "$@"
+        wp "$@" --color
     else
-        vendor/bin/wp "$@"
+        vendor/bin/wp "$@" --color
     fi
 }

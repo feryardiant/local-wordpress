@@ -92,12 +92,12 @@ else
         --admin_user=${SITE_ADMIN_USER:-admin} \
         --admin_password=${SITE_ADMIN_PASS:-secret} \
         --admin_email=${SITE_ADMIN_EMAIL:-'admin@example.com'} \
-        --skip-email --allow-root --color
+        --skip-email --allow-root
     e_end
 
     e_start 'Set up default options'
-    _wp option update permalink_structure "/%postname%/" --color
-    _wp option update timezone_string "${SITE_TIMEZONE:-Asia/Jakarta}" --color
+    _wp option update permalink_structure "/%postname%/"
+    _wp option update timezone_string "${SITE_TIMEZONE:-Asia/Jakarta}"
     e_end
 
     if [[ ! -f "$INSTALL_DIR/favicon.ico" ]]; then
@@ -126,7 +126,7 @@ if [[ -n "${SITE_PLUGINS:-}" ]]; then
 
         if [[ -n "$plugin_version" ]]; then
             echo -e "\e[1;36mInfo:\e[0m Installing '$plugin' (v$plugin_version)"
-            _wp plugin install "$plugin" --version="$plugin_version" --quiet
+            _wp plugin install "$plugin" --version="$plugin_version"
             installed_plugins+=("$plugin")
 
             continue
@@ -143,30 +143,30 @@ if [[ -n "${SITE_PLUGINS:-}" ]]; then
     fi
 
     if ((${#installed_plugins[@]} != 0 )); then
-        _wp plugin activate ${installed_plugins[@]} --color
+        _wp plugin activate ${installed_plugins[@]}
     fi
     e_end
 fi
 
 if _wp plugin is-active woocommerce; then
     e_start "Set up WooCommerce"
-    _wp option update woocommerce_store_address "${WC_STORE_ADDRESS:-'Jl. Example No. 123'}" --color
-    _wp option update woocommerce_store_city "${WC_STORE_CITY:-'Batang'}" --color
-    _wp option update woocommerce_default_country "${WC_DEFAULT_COUNTRY:-'ID:JT'}" --color
-    _wp option update woocommerce_currency "${WC_CURRENCY:-'IDR'}" --color
-    _wp option update woocommerce_store_postcode "${WC_STORE_POSTCODE:-'12345'}" --color
+    _wp option update woocommerce_store_address "${WC_STORE_ADDRESS:-'Jl. Example No. 123'}"
+    _wp option update woocommerce_store_city "${WC_STORE_CITY:-'Batang'}"
+    _wp option update woocommerce_default_country "${WC_DEFAULT_COUNTRY:-'ID:JT'}"
+    _wp option update woocommerce_currency "${WC_CURRENCY:-'IDR'}"
+    _wp option update woocommerce_store_postcode "${WC_STORE_POSTCODE:-'12345'}"
 
-    _wp option update woocommerce_weight_unit "${WC_WEIGHT_UNIT:-kg}" --color
-    _wp option update woocommerce_dimension_unit "${WC_DIMENSION_UNIT:-cm}" --color
-    _wp option update woocommerce_price_thousand_sep "${WC_PRICE_THOUSAND_SEP:-.}" --color
-    _wp option update woocommerce_price_decimal_sep "${WC_PRICE_DECIMAL_SEP:-,}" --color
-    _wp option update woocommerce_price_num_decimals "${WC_PRICE_DECIMAL_NUM:-0}" --color
+    _wp option update woocommerce_weight_unit "${WC_WEIGHT_UNIT:-kg}"
+    _wp option update woocommerce_dimension_unit "${WC_DIMENSION_UNIT:-cm}"
+    _wp option update woocommerce_price_thousand_sep "${WC_PRICE_THOUSAND_SEP:-.}"
+    _wp option update woocommerce_price_decimal_sep "${WC_PRICE_DECIMAL_SEP:-,}"
+    _wp option update woocommerce_price_num_decimals "${WC_PRICE_DECIMAL_NUM:-0}"
 
     # Skip the onboarding profile
-    _wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json --color
+    _wp option update woocommerce_onboarding_profile '{"skipped":true}' --format=json
 
     # Mark the task list as complete
-    _wp option update woocommerce_task_list_complete yes --color
+    _wp option update woocommerce_task_list_complete yes
     e_end
 fi
 
@@ -177,10 +177,10 @@ if [[ ${MULTISITE_ENABLED:-0} -eq 1 ]]; then
     cat "$ASSET_DIR/.htaccess.multisite" > "$INSTALL_DIR/.htaccess"
     echo 'Update .htaccess.'
 
-    _wp core multisite-convert --color
+    _wp core multisite-convert
 
     if ((${#installed_plugins[@]} != 0 )); then
-        _wp plugin activate ${installed_plugins[@]} --network --color
+        _wp plugin activate ${installed_plugins[@]} --network
     fi
     e_end
 fi
@@ -211,20 +211,20 @@ if [[ -n "${SITE_THEMES:-}" ]]; then
     done
 
     if [[ -n "$themes" ]]; then
-        _wp theme install $themes --color
+        _wp theme install $themes
     fi
 
     SITE_DEFAULT_THEME=${SITE_DEFAULT_THEME:-}
 
     if [[ -n "$SITE_DEFAULT_THEME" ]] && _wp theme is-installed "$SITE_DEFAULT_THEME"; then
-        _wp theme activate $SITE_DEFAULT_THEME --color
+        _wp theme activate $SITE_DEFAULT_THEME
     fi
     e_end
 fi
 
 e_start 'Cleanup'
 if _wp plugin is-installed hello; then
-    _wp plugin uninstall hello --color
+    _wp plugin uninstall hello
 fi
 e_end
 
