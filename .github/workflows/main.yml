@@ -66,12 +66,19 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
 
-      - name: Cache composer dependencies
+      - name: Set up Composer Cache
         uses: actions/cache@v5
         with:
           path: ${{ needs.prepare.outputs.composer-cache-dir }}
           key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
+
+      - name: Set up WP-CLI Cache
+        uses: actions/cache@v5
+        with:
+          path: $HOME/.wp-cli/cache
+          key: wp-${{ matrix.wp }}-wp-cli-${{ hashFiles('**/composer.lock') }}
+          restore-keys: wp-${{ matrix.wp }}-wp-cli-
 
       - name: Install dependencies
         run: |
@@ -85,6 +92,7 @@ jobs:
           WP_VERSION: ${{ matrix.wp }}
         run: |
           bash scripts/init-wp.sh
+          wp cli info
 
       # - name: Lint
       #   run: |
