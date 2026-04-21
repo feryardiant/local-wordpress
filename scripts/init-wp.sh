@@ -6,19 +6,19 @@ set -euo pipefail
 
 declare -A plugins_map
 
-                  # Blocksy Plugin  Contact         Woo
-                  # Comp.   Check   Form7   JetPack Comm.
-plugins_map['5.9']='2.0.86	0.2.0	5.7.7	11.2.2	7.5.2'
-plugins_map['6.0']='2.0.86	0.2.3	5.7.7	12.0.1	7.7.3'
-plugins_map['6.1']='2.0.86	0.2.3	5.7.7	12.5.1	7.9.2'
-plugins_map['6.2']='2.0.86	0.2.3	5.8.7	12.7.1	8.2.5'
-plugins_map['6.3']='2.0.86	1.9.0	5.9.8	13.2.1	8.7.3'
-plugins_map['6.4']='2.0.86	1.9.0	5.9.8	13.6.1	9.0.4'
-plugins_map['6.5']='2.1.38	1.9.0	5.9.8	13.9.1	9.4.5'
-plugins_map['6.6']='2.1.38	1.9.0	6.0.6	14.4.1	9.8.7'
-plugins_map['6.7']='2.1.38	1.9.0	6.1.5	15.1.1	10.3.8'
-plugins_map['6.8']='2.1.38	1.9.0	6.1.5	15.7.1	10.6.2'
-plugins_map['6.9']='2.1.38	1.9.0	6.1.5	15.7.1	10.6.2'
+                  # Blocksy Plugin Contact        Woo
+                  # Comp.   Check  Form7  JetPack Comm.
+plugins_map['5.9']='2.0.86  0.2.0  5.7.7  11.2.2  7.5.2'
+plugins_map['6.0']='2.0.86  0.2.3  5.7.7  12.0.1  7.7.3'
+plugins_map['6.1']='2.0.86  0.2.3  5.7.7  12.5.1  7.9.2'
+plugins_map['6.2']='2.0.86  0.2.3  5.8.7  12.7.1  8.2.5'
+plugins_map['6.3']='2.0.86  1.9.0  5.9.8  13.2.1  8.7.3'
+plugins_map['6.4']='2.0.86  1.9.0  5.9.8  13.6.1  9.0.4'
+plugins_map['6.5']='2.1.38  1.9.0  5.9.8  13.9.1  9.4.5'
+plugins_map['6.6']='2.1.38  1.9.0  6.0.6  14.4.1  9.8.7'
+plugins_map['6.7']='2.1.38  1.9.0  6.1.5  15.1.1  10.3.8'
+plugins_map['6.8']='2.1.38  1.9.0  6.1.5  15.7.1  10.6.2'
+plugins_map['6.9']='2.1.38  1.9.0  6.1.5  15.7.1  10.6.2'
 
 declare -A themes_map
 
@@ -42,8 +42,8 @@ fi
 WP_VERSION=${WP_VERSION:-'5.9'}
 # Reduce to major.minor for map lookup
 wp_version_key=$(echo "${WP_VERSION}" | awk -F. '{printf "%s.%s", $1, $2}')
-wp_plugins=(${plugins_map[${wp_version_key}]//\t/ })
-wp_themes=(${themes_map[${wp_version_key}]//\t/ })
+wp_plugins=(${plugins_map[${wp_version_key}]//\s/ })
+wp_themes=(${themes_map[${wp_version_key}]//\s/ })
 
 declare -A plugin_supports
 
@@ -83,7 +83,7 @@ if [[ ! -f "${INSTALL_DIR}/wp-config.php" ]]; then
 fi
 
 if _wp core is-installed --url="${SITE_URL}" --allow-root; then
-  echo "WordPress is already installed."
+  echo -e "\e[1;36mInfo:\e[0m WordPress is already installed."
 else
     e_start 'Install WordPress Core'
     _wp core install \
@@ -125,7 +125,7 @@ if [[ -n "${SITE_PLUGINS:-}" ]]; then
 
         if [[ -n "$plugin_version" ]]; then
             echo -e "\e[1;36mInfo:\e[0m Installing '$plugin' (v$plugin_version)"
-            _wp plugin install "$plugin" --version="$plugin_version"
+            _wp plugin install "$plugin" --version="$plugin_version" --quiet
             installed_plugins+=("$plugin")
 
             continue
@@ -186,7 +186,7 @@ fi
 
 if [[ -n "${SITE_THEMES:-}" ]]; then
     e_start 'Set up default themes'
-    themes=""
+    themes=()
 
     for theme in ${SITE_THEMES//,/ }; do
         if _wp theme is-installed "$theme"; then
@@ -196,7 +196,7 @@ if [[ -n "${SITE_THEMES:-}" ]]; then
 
         theme_version="${theme_supports[$theme]:-}"
         if [[ "$theme_version" == "none" ]]; then
-            echo " - Skipping $theme: incompatible with WordPress ${WP_VERSION}"
+            echo -e "\e[1;36mNotice:\e[0m Skipping '$plugin' - incompatible with WordPress ${WP_VERSION}"
             continue
         fi
 
@@ -206,11 +206,11 @@ if [[ -n "${SITE_THEMES:-}" ]]; then
             continue
         fi
 
-        themes="$themes $theme"
+        themes+=("$theme")
     done
 
-    if [[ -n "$themes" ]]; then
-        _wp theme install $themes
+    if ((${#themes[@]} != 0 )); then
+        _wp theme install ${themes[@]}
     fi
 
     SITE_DEFAULT_THEME=${SITE_DEFAULT_THEME:-}
