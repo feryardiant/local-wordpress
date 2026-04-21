@@ -50,7 +50,7 @@ jobs:
       fail-fast: false
       matrix:
         php: ['8.1']
-        wp: ['6.0']
+        wp: ['5.9', '6.0', '6.1', '6.2', '6.3', '6.4', '6.5', '6.6', '6.7', '6.8', '6.9']
 
     steps:
       - name: Checkout
@@ -89,7 +89,7 @@ jobs:
         env:
           DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
           MULTISITE_ENABLED: 0
-          SITE_PLUGINS: blocksy-companion,contact-form-7
+          SITE_PLUGINS: blocksy-companion,jetpack,contact-form-7,plugin-check,woocommerce
           SITE_THEMES: blocksy
           WP_VERSION: ${{ matrix.wp }}
         run: |
