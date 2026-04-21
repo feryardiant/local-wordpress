@@ -66,6 +66,12 @@ theme_supports['blocksy']="${wp_themes[0]:-2.0.86}"
 ASSET_DIR=${ASSET_DIR:-"$PWD/assets"}
 INSTALL_DIR=${INSTALL_DIR:-"$PWD/docker/volumes/wordpress"}
 
+if [[ ! -d "${ASSET_DIR}" ]]; then
+    echo -e "\e[1;31mError:\e[0m Unable to continue installation."
+    echo -e "       Asset directory '\e[33m${ASSET_DIR}\e[0m' is missing."
+    exit 1
+fi
+
 SITE_URL=${SITE_URL:-'http://localhost'}
 
 if [[ ${WP_RESET:-0} -eq 1 ]]; then
