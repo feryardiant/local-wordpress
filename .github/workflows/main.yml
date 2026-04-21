@@ -92,7 +92,7 @@ jobs:
           WP_VERSION: ${{ matrix.wp }}
         run: |
           bash scripts/init-wp.sh
-          wp cli info
+          vendor/bin/wp cli info
 
       # - name: Lint
       #   run: |
