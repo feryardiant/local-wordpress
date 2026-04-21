@@ -76,7 +76,7 @@ jobs:
       - name: Set up WP-CLI Cache
         uses: actions/cache@v5
         with:
-          path: $HOME/.wp-cli/cache
+          path: "/home/runner/.wp-cli/cache"
           key: wp-${{ matrix.wp }}-wp-cli-${{ hashFiles('**/composer.lock') }}
           restore-keys: wp-${{ matrix.wp }}-wp-cli-
 
@@ -92,7 +92,6 @@ jobs:
           WP_VERSION: ${{ matrix.wp }}
         run: |
           bash scripts/init-wp.sh
-          vendor/bin/wp cli info
 
       # - name: Lint
       #   run: |
