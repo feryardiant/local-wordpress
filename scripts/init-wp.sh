@@ -22,7 +22,7 @@ plugins_map['6.9']='2.1.38	1.9.0	6.1.5	15.7.1	10.6.2'
 
 declare -A themes_map
 
-                  # Blocksy
+                 # Blocksy
 themes_map['5.9']='2.0.86'
 themes_map['6.0']='2.0.86'
 themes_map['6.1']='2.0.86'
@@ -55,7 +55,6 @@ plugin_supports['woocommerce']="${wp_plugins[4]:-9.2.3}"
 
 declare -A theme_supports
 
-# ContactForm7
 theme_supports['blocksy']="${wp_themes[0]:-2.0.86}"
 
 ASSET_DIR=${ASSET_DIR:-"$PWD/assets"}
