@@ -3,6 +3,10 @@
 set -euo pipefail
 shopt -s nullglob
 
+. "$(dirname "$0")/_util.sh"
+
+ASSET_DIR=${ASSET_DIR:-"$PWD/assets"}
+
 for pkg_dir in packages/*/; do
     pkg_dir="${pkg_dir%/}"
     pkg="${pkg_dir##*/}"
@@ -14,11 +18,11 @@ for pkg_dir in packages/*/; do
 
     composer -d "$pkg_dir" install
 
-    rm public/dist/$pkg.*.zip
+    rm -f "$ASSET_DIR/dist/$pkg.*.zip"
 
     cp LICENSE-GPL "$pkg_dir/license.txt"
 
-    ./vendor/bin/wp dist-archive "$pkg_dir" public/dist --force --create-target-dir
+    _wp dist-archive "$pkg_dir" "$ASSET_DIR/dist" --force --create-target-dir
 
     rm "$pkg_dir/license.txt"
 done

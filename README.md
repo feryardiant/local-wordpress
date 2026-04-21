@@ -57,9 +57,9 @@ SITE_PLUGINS=akismet,woocommerce,contact-form-7
 This project is organized as a **monorepo** to simplify the development of multiple WordPress assets simultaneously.
 
 ### 📂 Directory Structure
+- [`assets/`](assets/): Static assets, favicon, and server configurations.
 - [`docker/`](docker/): Core "Zero-Config" engine ([`init-wp.sh`](scripts/init-wp.sh)).
 - [`packages/`](packages/): Local themes and plugins (e.g., [`cf7-entry-manager`](packages/cf7-entry-manager)).
-- [`public/`](public/): Static assets, favicon, and server configurations.
 - [`scripts/`](scripts/): Development utilities (POT generation, Distribution).
 - [`volumes/`](volumes/): Persisted data for WordPress, MySQL, and Mailpit.
 
