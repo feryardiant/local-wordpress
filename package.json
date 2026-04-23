@@ -34,10 +34,10 @@
       "biome format --write --no-errors-on-unmatched"
     ],
     "packages/**/*.php": [
-      "sh -c 'composer lint:packages -- \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
+      "sh -c 'composer format:packages -- \"$@\"; [ \"$?\" -eq 0 ] || [ \"$?\" -eq 1 ]' --"
     ],
     "tests/**/*.php": [
-      "sh -c 'composer lint:tests -- \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
+      "sh -c 'composer format:tests -- \"$@\"; [ \"$?\" -eq 0 ] || [ \"$?\" -eq 1 ]' --"
     ],
     "{package,tsconfig}.json": [
       "biome format --write --no-errors-on-unmatched"

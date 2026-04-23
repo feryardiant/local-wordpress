@@ -19,18 +19,24 @@
     ],
     "scripts": {
         "format": [
-            "phpcbf ./packages --standard=./packages/phpcs.xml",
-            "phpcbf ./tests --standard=./tests/phpcs.xml"
+            "@format:packages",
+            "@format:tests"
+        ],
+        "format:packages": [
+            "phpcbf --standard=packages/phpcs.xml"
+        ],
+        "format:tests": [
+            "phpcbf --standard=tests/phpcs.xml"
         ],
         "lint": [
             "@lint:packages",
             "@lint:tests"
         ],
         "lint:packages": [
-            "phpcs ./packages --standard=./packages/phpcs.xml"
+            "phpcs --standard=packages/phpcs.xml"
         ],
         "lint:tests": [
-            "phpcs ./tests --standard=./tests/phpcs.xml"
+            "phpcs --standard=tests/phpcs.xml"
         ],
         "test": [
             "phpunit --coverage-text"
