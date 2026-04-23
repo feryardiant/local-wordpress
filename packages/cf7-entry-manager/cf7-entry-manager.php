@@ -37,19 +37,17 @@ if ( version_compare( PHP_VERSION, CF7EM__MINIMUM_PHP_VERSION, '<' ) ) {
 	add_action(
 		'admin_notices',
 		static function () {
-			$message = sprintf(
+			echo '<div class="notice notice-error is-dismissible"><p>';
+
+			// phpcs:disable WordPress.Security.EscapeOutput
+			printf(
 				/* translators: %s: version of PHP required by Entry Manager for Contact Form 7 plugin. */
 				__( 'Entry <strong>Manager for Contact Form 7</strong> requires at least version <strong>%s</strong> of <strong>PHP</strong> and has been paused.', 'cf7-entry-manager' ),
 				CF7EM__MINIMUM_PHP_VERSION
 			);
-
-			// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
-			echo <<<HTML
-			<div class="notice notice-error is-dismissible">
-				<p>$message</p>
-			</div>
-			HTML;
 			// phpcs:enable
+
+			echo '</p></div>';
 		}
 	);
 
@@ -63,19 +61,17 @@ if ( version_compare( $GLOBALS['wp_version'], CF7EM__MINIMUM_WP_VERSION, '<' ) )
 	add_action(
 		'admin_notices',
 		static function () {
-			$message = sprintf(
+			echo '<div class="notice notice-error is-dismissible"><p>';
+
+			// phpcs:disable WordPress.Security.EscapeOutput
+			printf(
 				/* translators: %s: version of WordPress required by Entry Manager for Contact Form 7 plugin. */
 				__( 'Entry <strong>Manager for Contact Form 7</strong> requires at least version <strong>%s</strong> of <strong>WordPress</strong> and has been paused.', 'cf7-entry-manager' ),
 				CF7EM__MINIMUM_WP_VERSION
 			);
-
-			// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
-			echo <<<HTML
-			<div class="notice notice-error is-dismissible">
-				<p>$message</p>
-			</div>
-			HTML;
 			// phpcs:enable
+
+			echo '</p></div>';
 		}
 	);
 
@@ -119,19 +115,17 @@ add_action(
 			add_action(
 				'admin_notices',
 				static function () {
-					$message = sprintf(
+					echo '<div class="notice notice-error is-dismissible"><p>';
+
+					// phpcs:disable WordPress.Security.EscapeOutput
+					printf(
 						/* translators: %s: version of Contact Form 7 required by Entry Manager for Contact Form 7 plugin. */
 						__( 'Entry <strong>Manager for Contact Form 7</strong> requires at least version <strong>%s</strong> of <strong>Contact Form 7</strong> and has been paused.', 'cf7-entry-manager' ),
 						CF7EM__MINIMUM_WPCF7_VERSION
 					);
-
-					// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped
-					echo <<<HTML
-					<div class="notice notice-error is-dismissible">
-						<p>$message</p>
-					</div>
-					HTML;
 					// phpcs:enable
+
+					echo '</p></div>';
 				}
 			);
 
