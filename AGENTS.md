@@ -20,9 +20,13 @@ A Dockerized WordPress local development environment using Apache, MySQL 8.0, an
 1.  **Themes/Plugins**: Prefer creating custom themes/plugins in `packages/` and symlinking them or mounting them into `volumes/wordpress/wp-content/` if intended for portability.
 2.  **Initialization**: Changes to site titles, admin users, or pre-installed plugins should be implemented in `docker/init-wp.sh`.
 3.  **Security**: NEVER commit the `.env` file or any other secrets to version control.
+4.  **Testing Standards**:
+    - **Naming**: Use `camelCase` for all test methods (e.g., `testMethodName`). Do NOT use `snake_case`.
+    - **Docblocks**: All methods in test classes (including `setUp`, `tearDown`, etc.) MUST include a descriptive docblock and the `@return void` tag.
+    - **Assertions**: When mocking hooks with Brain Monkey, ensure `addToAssertionCount()` accurately reflects the number of expectations set.
 
 ## 📝 Persistent Memory (Context)
 
-- **Date**: 2026-04-18
-- **Status**: Environment is fully documented with automated WordPress installation, custom theme support, and the Entry Manager for Contact Form 7 plugin for lead evaluation. Metadata is managed via the `.gemini/` directory.
-- **Next Steps**: (Add future project goals here as needed).
+- **Date**: 2026-04-23
+- **Status**: Environment is fully documented. Test architecture has been updated to use `camelCase` naming conventions and strict docblock standards (including `@return void`).
+- **Next Steps**: Continue maintaining strict PSR-12 and WordPress coding standards across all packages and tests.

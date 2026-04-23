@@ -46,6 +46,12 @@ All outgoing emails are captured by **Mailpit**.
 ### 📁 Local Packages
 Place your theme or plugin folder in the [`packages/`](packages/) directory. They are automatically discovered and can be managed via the root toolset.
 
+#### 🏗️ Adding a New Package
+1. **Create Directory**: `mkdir packages/my-new-plugin`
+2. **Mount Volume**: Add the new path to `compose.yml` under both `wp` and `cli` services.
+3. **Register PHP Dependencies**: Ensure the package has a `composer.json`. Run `composer install` at the project root to merge its dependencies.
+4. **Register Assets**: Ensure the package has a `package.json`. Run `bun install` at the root to register its workspace.
+
 ### 🌐 Official Repository
 Add slugs to `SITE_PLUGINS` or `SITE_THEMES` in your `.env`:
 ```bash
@@ -58,9 +64,9 @@ This project is organized as a **monorepo** to simplify the development of multi
 
 ### 📂 Directory Structure
 - [`assets/`](assets/): Static assets, favicon, and server configurations.
-- [`docker/`](docker/): Core "Zero-Config" engine ([`init-wp.sh`](scripts/init-wp.sh)).
+- [`docker/`](docker/): Local MySQL data and service configurations.
 - [`packages/`](packages/): Local themes and plugins (e.g., [`cf7-entry-manager`](packages/cf7-entry-manager)).
-- [`scripts/`](scripts/): Development utilities (POT generation, Distribution).
+- [`scripts/`](scripts/): Development utilities (Installation, POT generation, Distribution).
 - [`volumes/`](volumes/): Persisted data for WordPress, MySQL, and Mailpit.
 
 ## 🛠️ Development Tools
@@ -71,12 +77,20 @@ This project is organized as a **monorepo** to simplify the development of multi
 
 ### 🎨 Linting & Formatting
 - **Biome**: For JS, TS, JSON, and CSS (`bun lint`).
-- **PHPCS**: Enforces WordPress Coding Standards (`composer lint`).
+- **PHPCS**: All WordPress packages located in [`packages/`](packages/) directory should follow [WordPress](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/) Coding Standards (`composer lint:packages`), while the [`tests/`](tests/) should use [`PSR12`](https://www.php-fig.org/psr/psr-12/) Coding Standards (`composer lint:tests`).
 
 ### 📦 Scripts
 - [`scripts/init-wp.sh`](scripts/init-wp.sh): Dynamically download, configure, and install a fresh WordPress core.
 - [`scripts/make-pot.sh`](scripts/make-pot.sh): Generates translation files for all packages.
-- [`scripts/make-dist.sh`](scripts/make-dist.sh): Creates production-ready ZIP archives.
+- [`scripts/make-dist.sh`](scripts/make-dist.sh): Creates production-ready ZIP archives. Requires a `.distignore` file in the package directory to filter contents.
+
+### 🐞 Debugging & Inspections
+- **Xdebug**: Pre-installed and configured for PHP 8.1+. Connect your IDE to the `9003` port on your local machine.
+- **WP-CLI**: Access the containerized CLI via the `cli` service.
+  ```bash
+  docker compose run --rm cli wp <command>
+  ```
+- **Database Access**: Connect to the local MySQL server at `localhost:3306` using the credentials defined in `.env`.
 
 ## 🧪 Testing & Quality Assurance
 
@@ -91,7 +105,7 @@ Ensure you have installed development dependencies via `composer install`.
 ```bash
 composer test
 ```
-This will execute all test suites defined in [`phpunit.xml`](phpunit.xml) and output a text-based coverage report.
+This will execute all test suites defined in [`phpunit.xml`](phpunit.xml) and output a text-based coverage report. Tests are designed to run on the host machine using the root `vendor/bin/phpunit` binary.
 
 ### 🔄 Continuous Integration (CI)
 Automated testing is integrated into the development lifecycle via **GitHub Actions** ([`.github/workflows/main.yml`](.github/workflows/main.yml)):
