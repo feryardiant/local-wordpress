@@ -4,18 +4,11 @@
  * PHPUnit Bootstrap
  */
 
-$_root = dirname(__DIR__);
+defined('BASE_PATH') || define('BASE_PATH', dirname(__DIR__));
 
-require_once $_root . '/vendor/autoload.php';
+require_once BASE_PATH . '/vendor/autoload.php';
 
 // Mock WordPress constants if needed
-if (! defined('ABSPATH')) {
-    define('ABSPATH', $_root . '/docker/volumes/wordpress/');
-}
-
-defined('WP_TESTS_DOMAIN') || define('WP_TESTS_DOMAIN', '');
-defined('WP_TESTS_EMAIL') || define('WP_TESTS_EMAIL', '');
-defined('WP_TESTS_TITLE') || define('WP_TESTS_TITLE', '');
-defined('WP_PHP_BINARY') || define('WP_PHP_BINARY', '');
+defined('ABSPATH') || define('ABSPATH', BASE_PATH . '/docker/volumes/wordpress/');
 
 // Any other test initialization can go here.

@@ -43,6 +43,6 @@ abstract class TestCase extends PHPUnitTestCase
      */
     protected static function packageFile(string $file_path): string
     {
-        return dirname(ABSPATH, 3) . '/packages/' . $file_path;
+        return BASE_PATH . '/packages/' . $file_path;
     }
 }
