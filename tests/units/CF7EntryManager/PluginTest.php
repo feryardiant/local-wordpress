@@ -54,7 +54,5 @@ class PluginTest extends BaseTestCase
         $this->assertEquals('0.1.0', CF7EM_VERSION);
         $this->assertTrue(defined('CF7EM__MINIMUM_WP_VERSION'));
         $this->assertTrue(defined('CF7EM__MINIMUM_PHP_VERSION'));
-
-        $this->addToAssertionCount(2); // Actions\expectAdded and Filters\expectAdded
     }
 }
