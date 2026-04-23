@@ -9,8 +9,8 @@
     ]
   },
   "scripts": {
+    "format": "biome format --write",
     "lint": "biome check",
-    "lint:fix": "biome format --write",
     "postinstall": "if [ -z \"$CI\" ]; then simple-git-hooks; fi"
   },
   "devDependencies": {
@@ -33,8 +33,11 @@
     "*.{css,jsonc,ts}": [
       "biome format --write --no-errors-on-unmatched"
     ],
-    "*.php": [
-      "sh -c 'vendor/bin/phpcbf \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
+    "packages/**/*.php": [
+      "sh -c 'composer lint:packages -- \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
+    ],
+    "tests/**/*.php": [
+      "sh -c 'composer lint:tests -- \"$@\"; status=$?; [ \"$status\" -eq 0 ] || [ \"$status\" -eq 1 ]' --"
     ],
     "{package,tsconfig}.json": [
       "biome format --write --no-errors-on-unmatched"
