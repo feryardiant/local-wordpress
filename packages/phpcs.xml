@@ -33,13 +33,6 @@
         <!-- Allows: Variable assignment in condition, e.g. `if ( $var = some_func() ) { ... }` -->
         <exclude name="Generic.CodeAnalysis.AssignmentInCondition.Found" />
 
-        <!--
-        This is actually somewhat missleading, happens to `Page_Element::when()` in
-        `./packages/cf7-entry-manager/includes/class-page-element.php`, where `$met`
-        param is actually a `Closure(self)` but even I wrote it correctly `phpcs` keeps
-        complaining, like I was write it using `Closure` type hint. It says:
-        __Expected type hint "Closure(self)"; found "Closure" for $met__
-        -->
         <exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint" />
 
         <!-- Allows: Commented-out code, e.g. `// $var = disabled_func();` -->

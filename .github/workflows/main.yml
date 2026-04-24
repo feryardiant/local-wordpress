@@ -89,7 +89,7 @@ jobs:
         env:
           DB_HOST: 127.0.0.1:${{ job.services.mysql.ports['3306'] }}
           MULTISITE_ENABLED: 0
-          SITE_PLUGINS: blocksy-companion,jetpack,contact-form-7,plugin-check,woocommerce
+          SITE_PLUGINS: blocksy-companion,jetpack,plugin-check,woocommerce
           SITE_THEMES: blocksy
           WP_VERSION: ${{ matrix.wp }}
         run: |

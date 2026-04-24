@@ -28,6 +28,3 @@ This project handles dependencies at the root level using a monorepo approach:
 
 ### Themes
 - **custom-theme**: A starter theme for local development.
-
-### Plugins
-- **cf7-entry-manager**: Entry Manager for Contact Form 7. Captures every submission and stores it securely in the database. Includes automated PHP Mailer configuration to route WordPress emails to the project's Mailpit service.

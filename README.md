@@ -1,8 +1,33 @@
-# 📦 WordPress Evaluation Environment
+# 🎓 learn-wordpress: Archive & Knowledge Base
 
-**Zero-config, Docker-based local environment for rapid theme and plugin evaluation.**
+> **ARCHIVE NOTICE**: This repository has been refactored into a development harness and is now archived. It serves as a historical record of my journey learning WordPress development, testing patterns, and Docker orchestration.
 
-Spin up a fully installed WordPress site in seconds, bypassing the setup wizard entirely. This environment is pre-tuned for high-speed testing of themes, plugins, and complex setups like WooCommerce or Multisite.
+This project evolved from a simple evaluation tool into a robust development environment. Below are the key architectural patterns and technical lessons captured in this "Knowledge Base."
+
+---
+
+### 🎓 What I've Learnt
+
+#### 1. The "Last-Mile" Orchestration
+Installing WordPress via CLI is easy; automating the *configuration* of complex plugins like WooCommerce or Multisite is the hard part.
+*   **Lesson**: Use a dedicated `cli` service in Docker that waits for the database and web server to be healthy before executing a cold-start script (`init-wp.sh`).
+*   **Result**: A zero-config environment that bypasses the "Five-Minute Install" and lands you directly in a configured dashboard.
+
+#### 2. Monorepo Management for PHP & JS
+Managing multiple WordPress assets (themes and plugins) in one repo can lead to dependency hell.
+*   **Lesson**: Use `wikimedia/composer-merge-plugin` for PHP and **Bun Workspaces** for JS. This allows individual packages to define their own dependencies while the root manages the unified vendor/node_modules.
+*   **Result**: Simplified linting, testing, and distribution across all packages.
+
+#### 3. Advanced Testing Patterns
+WordPress testing often falls into the trap of requiring a full database for every test.
+*   **Lesson**: Lean heavily on **Brain Monkey** for unit testing hooks and functions without loading the WordPress core. Use PHPUnit 10's newer features for better test organization.
+*   **Result**: High-speed test suites that provide instant feedback during development.
+
+---
+
+## 🏗️ Project Architecture (The Harness)
+
+This repository now serves as a **Harness**—a reusable engine for WordPress development.
 
 ### ⚡ Key Features
 - 🚀 **Zero-Config**: Fully installed WordPress site via `docker compose up`.
@@ -57,16 +82,6 @@ Add slugs to `SITE_PLUGINS` or `SITE_THEMES` in your `.env`:
 ```bash
 SITE_PLUGINS=akismet,woocommerce,contact-form-7
 ```
-
-## 🏗️ Project Architecture
-
-This project is organized as a **monorepo** to simplify the development of multiple WordPress assets simultaneously.
-
-### 📂 Directory Structure
-- [`assets/`](assets/): Static assets, favicon, and server configurations.
-- [`docker/`](docker/): Local MySQL data and service configurations.
-- [`packages/`](packages/): Local themes and plugins (e.g., [`cf7-entry-manager`](packages/cf7-entry-manager)).
-- [`scripts/`](scripts/): Development utilities (Installation, POT generation, Distribution).
 
 ## 🛠️ Development Tools
 

@@ -24,7 +24,6 @@ services:
       <<: *wp-envs
     volumes:
       - ./docker/volumes/wordpress:/var/www/html
-      - ./packages/cf7-entry-manager:/var/www/html/wp-content/plugins/cf7-entry-manager
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost"]
@@ -69,7 +68,6 @@ services:
       - ${HOME}/.wp-cli:/home/www-data/.wp-cli
       - ./assets:/var/www/setup/assets
       - ./docker/volumes/wordpress:/var/www/html
-      - ./packages/cf7-entry-manager:/var/www/html/wp-content/plugins/cf7-entry-manager:ro
       - ./packages/custom-theme:/var/www/html/wp-content/themes/custom-theme:ro
       - ./scripts:/var/www/setup/scripts:ro
 
